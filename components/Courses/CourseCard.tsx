@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function CourseCard() {
   return (
@@ -30,13 +30,14 @@ export default function CourseCard() {
       </CardContent>
       <CardFooter className={"flex justify-between items-center"}>
         <div>5 star ratings</div>
-        <Button
+        <Link
+        href={`/details/3`}
           className={
-            "bg-gradient-to-r px-4 from-indigo-800 to-indigo-600 hover:from-indigo-600 hover:to-indigo-800 text-white"
+            "bg-gradient-to-r px-4 py-2 rounded-lg from-indigo-800 to-indigo-600 hover:from-indigo-600 hover:to-indigo-800 text-white"
           }
         >
           Enroll
-        </Button>
+        </Link>
       </CardFooter>
     </Card>
   );

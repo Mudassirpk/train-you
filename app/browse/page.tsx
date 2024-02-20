@@ -1,5 +1,6 @@
 import SearchCourse from "@/components/home/SearchCourse";
 import CoursesGrid from "@/app/browse/coursesgrid";
+import Pagination from "./pagination";
 
 export default function Browse() {
   return (
@@ -12,6 +13,7 @@ export default function Browse() {
         </h2>
         <div className={"w-full"}>
           <CoursesGrid />
+          <Pagination />
         </div>
       </section>
     </main>

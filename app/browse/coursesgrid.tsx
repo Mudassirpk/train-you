@@ -1,4 +1,5 @@
 import CourseCard from "@/components/Courses/CourseCard";
+import { Pagination } from "@/components/ui/pagination";
 
 export default function CoursesGrid() {
   return (
