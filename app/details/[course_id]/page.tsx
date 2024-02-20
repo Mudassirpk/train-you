@@ -15,7 +15,7 @@ export default function Details() {
             <Image
               alt="product-image"
               src={"/teacher.jpg"}
-              objectFit="contain"
+              style={{ objectFit: "cover" }}
               fill={true}
             />
           </div>
@@ -36,7 +36,7 @@ export default function Details() {
                   <div className="w-11 h-10 relative overflow-hidden rounded-lg">
                     <Image
                       alt="trainer"
-                      objectFit="cover"
+                      style={{ objectFit: "cover" }}
                       src={"/person.jpg"}
                       fill={true}
                     />
@@ -72,7 +72,7 @@ export default function Details() {
               <div className="relative w-16 h-14 overflow-hidden rounded-lg">
                 <Image
                   alt="commentor"
-                  objectFit="cover"
+                  style={{ objectFit: "cover" }}
                   src={"/person.jpg"}
                   fill={true}
                 />

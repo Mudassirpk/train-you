@@ -22,7 +22,7 @@ export default function CourseCard() {
         <div className={"w-full h-[250px] relative"}>
           <Image
             src={"/teacher.jpg"}
-            objectFit={"contain"}
+            style={{ objectFit: "cover" }}
             alt={"a picture of course"}
             fill={true}
           />
@@ -31,7 +31,7 @@ export default function CourseCard() {
       <CardFooter className={"flex justify-between items-center"}>
         <div>5 star ratings</div>
         <Link
-        href={`/details/3`}
+          href={`/details/3`}
           className={
             "bg-gradient-to-r px-4 py-2 rounded-lg from-indigo-800 to-indigo-600 hover:from-indigo-600 hover:to-indigo-800 text-white"
           }

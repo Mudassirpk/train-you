@@ -43,7 +43,7 @@ export default function Hero() {
       <div className={"w-[50%] sm-lg:w-full h-[400px] relative"}>
         <Image
           src={"/hero.jpg"}
-          objectFit={"contain"}
+          style={{ objectFit: "contain" }}
           alt={"hero-banner"}
           fill={true}
         />

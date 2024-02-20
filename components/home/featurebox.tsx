@@ -15,7 +15,7 @@ export default function FeatureBox() {
       >
         <Image
           src={"/feature-box-image.jpg"}
-          objectFit={"contain"}
+          style={{ objectFit: "contain" }}
           alt={"a happy student learning something on a laptop."}
           fill={true}
         />

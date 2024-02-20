@@ -24,7 +24,7 @@ export default function BecomeATeacher() {
       </div>
       <div className={"w-[50%] relative h-[400px] md:w-full"}>
         <Image
-          objectFit={"contain"}
+          style={{ objectFit: "contain" }}
           src={"/teacher.jpg"}
           alt={"a teacher teaching on a laptop"}
           fill={true}
