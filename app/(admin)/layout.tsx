@@ -5,10 +5,10 @@ type Props = { children: React.ReactNode };
 
 function DashboardLayout({ children }: Props) {
   return (
-    <body className="flex gap-2 min-h-screen">
+    <div className="flex gap-2 min-h-screen">
       <SideBar />
       {children}
-    </body>
+    </div>
   );
 }
 
