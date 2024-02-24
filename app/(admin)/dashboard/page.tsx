@@ -6,6 +6,7 @@ import Loading from "@/app/(admin)/dashboard/loading";
 import { Separator } from "@/components/ui/separator";
 import DashboardCard from "@/components/dashboard/dashboardCard";
 import BestSelling from "@/components/dashboard/bestSelling";
+import LatestEvent from "@/components/dashboard/latestevent";
 
 export default function Dashboard() {
   const { data, status } = useSession();
@@ -40,6 +41,7 @@ export default function Dashboard() {
             unit={{ title: "RS", position: "left" }}
           />{" "}
           <BestSelling />
+          <LatestEvent />
         </div>
       </section>
     </main>
