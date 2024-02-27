@@ -19,6 +19,7 @@ export default function Dashboard() {
   }, [status]);
 
   if (status === "loading") return <Loading />;
+  
   return (
     <main className="flex-1 h-screen py-4 pr-4">
       <section className="w-full h-full p-2 rounded-lg border-2 border-indigo-600">

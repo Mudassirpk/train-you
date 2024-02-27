@@ -34,26 +34,31 @@ export default function SideBar() {
         <Separator className="my-2" />
         <div className="w-full flex flex-col items-center gap-2 py-2 flex-1">
           <SidebarItem
+            to="/dashboard"
             icon={<MdDashboard className="text-2xl" />}
             itemName="Dashboard"
             collapsed={collapsed}
           />
           <SidebarItem
+            to="/dashboard/courses"
             icon={<SiCoursera className="text-2xl" />}
             itemName="Courses"
             collapsed={collapsed}
           />
           <SidebarItem
+            to="/students"
             icon={<PiStudent className="text-2xl" />}
             itemName="Students"
             collapsed={collapsed}
           />
           <SidebarItem
+            to="/events"
             icon={<MdEvent className="text-2xl" />}
             itemName="Events"
             collapsed={collapsed}
           />
           <SidebarItem
+            to="venues"
             icon={<LuLandmark className="text-2xl" />}
             itemName="Venues"
             collapsed={collapsed}
