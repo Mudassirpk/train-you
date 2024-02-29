@@ -7,6 +7,7 @@ import Account from "@/components/Account";
 import Link from "next/link";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import QueryProvider from "@/providers/queryprovider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,15 +24,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       {/* @ts-ignore */}
-      <AuthProvider>
-        <body
-          className={`${inter.className} flex flex-col min-h-screen max-w-[1340px] mx-auto`}
-        >
-          <Header />
-          {children}
-          <Footer />
-        </body>
-      </AuthProvider>
+      <QueryProvider>
+        <AuthProvider>
+          <body
+            className={`${inter.className} flex flex-col min-h-screen max-w-[1340px] mx-auto`}
+          >
+            <Header />
+            {children}
+            <Footer />
+          </body>
+        </AuthProvider>
+      </QueryProvider>
     </html>
   );
 }
