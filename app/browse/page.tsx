@@ -1,8 +1,13 @@
+'use client'
 import SearchCourse from "@/components/home/SearchCourse";
 import CoursesGrid from "@/app/browse/coursesgrid";
 import Pagination from "./pagination";
+import { useSearchParams } from "next/navigation";
 
 export default function Browse() {
+  // TODO: get all courses relative to the query in query params if they are there
+  const params = useSearchParams()
+ 
   return (
     <main className={"w-full flex-1"}>
       <SearchCourse />

@@ -10,9 +10,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 export default function Account() {
   const { data: session, status } = useSession();
+  console.log(session?.user)
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -35,7 +37,9 @@ export default function Account() {
             Settings
           </DropdownMenuItem>
           <DropdownMenuItem className={"cursor-pointer"}>
-            Dashboard
+            <Link href={'/dashboard'}>
+              Dashboard
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className={"cursor-pointer"}>
             Logout

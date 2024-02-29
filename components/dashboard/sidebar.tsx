@@ -9,10 +9,15 @@ import { PiStudent } from "react-icons/pi";
 import { MdEvent } from "react-icons/md";
 import { LuLandmark } from "react-icons/lu";
 import { useState } from "react";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
+import { MdAdd } from "react-icons/md";
 
 export default function SideBar() {
+  const { data, status } = useSession();
   const [collapsed, setCollapsed] = useState(false);
-
+  const router = useRouter();
   return (
     <section className={`h-screen p-4 ${collapsed ? "w-auto" : "w-[300px]"}`}>
       <div
@@ -39,6 +44,14 @@ export default function SideBar() {
             itemName="Dashboard"
             collapsed={collapsed}
           />
+          {(data?.user as any).role === "teacher" ? (
+            <SidebarItem
+              to="/dashboard/create-course"
+              icon={<MdAdd className="text-2xl" />}
+              itemName="Add new course"
+              collapsed={collapsed}
+            />
+          ) : null}
           <SidebarItem
             to="/dashboard/courses"
             icon={<SiCoursera className="text-2xl" />}
@@ -64,9 +77,14 @@ export default function SideBar() {
             collapsed={collapsed}
           />
         </div>{" "}
-        <div className="self-end hover:bg-indigo-600 hover:text-white font-semibold text-center bg-indigo-200 text-indigo-600 w-full p-2 rounded-lg">
+        <Button
+          onClick={() => {
+            signOut({ callbackUrl: "http://localhost:3000/login" });
+          }}
+          className="self-end hover:bg-indigo-600 hover:text-white font-semibold text-center bg-indigo-200 text-indigo-600 w-full p-2 rounded-lg"
+        >
           Logout
-        </div>
+        </Button>
       </div>
     </section>
   );

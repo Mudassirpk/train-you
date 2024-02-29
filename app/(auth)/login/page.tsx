@@ -2,6 +2,8 @@
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { signIn } from "next-auth/react";
+import Loading from "@/components/loading";
+import Link from "next/link";
 
 export default function Login() {
   const router = useRouter();
@@ -12,6 +14,7 @@ export default function Login() {
   });
 
   const [error, setError] = useState<null | string>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   async function login(e: FormEvent) {
     e.preventDefault();
@@ -20,6 +23,7 @@ export default function Login() {
     if (res?.status === 200) {
       setIsLoading(false);
       setError(null);
+      setSuccess("Login successfull redirecting to your dashboard");
       router.push("/dashboard");
     } else {
       setIsLoading(false);
@@ -89,17 +93,26 @@ export default function Login() {
           </div>
 
           <div>
-            <button
-              disabled={isLoading}
-              type="submit"
-              className={`${
-                isLoading
-                  ? "bg-gray-500 cursor-not-allowed text-white"
-                  : "bg-indigo-600 text-sm leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              } flex w-full justify-center rounded-md px-3 py-1.5 font-semibold`}
-            >
-              {isLoading ? "Please wait ...." : "Sign in"}
-            </button>
+            {success ? (
+              <div className="w-full flex gap-2 items-center text-green-800 bg-green-100 p-2 rounded-lg ">
+                <div className="w-20">
+                  <Loading />
+                </div>
+                <p className="text-center flex-1">{success}</p>
+              </div>
+            ) : (
+              <button
+                disabled={isLoading}
+                type="submit"
+                className={`${
+                  isLoading
+                    ? "bg-gray-500 cursor-not-allowed text-white"
+                    : "bg-indigo-600 text-sm leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                } flex w-full justify-center rounded-md px-3 py-1.5 font-semibold`}
+              >
+                {isLoading ? "Please wait ...." : "Sign in"}
+              </button>
+            )}
           </div>
           {error ? (
             <p
@@ -110,6 +123,15 @@ export default function Login() {
               {error}
             </p>
           ) : null}
+          <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+            Don't have an account?{" "}
+            <Link
+              href="/signup"
+              className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+            >
+              Create an account
+            </Link>
+          </p>
         </form>
       </div>
     </main>
