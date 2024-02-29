@@ -17,7 +17,6 @@ import { MdAdd } from "react-icons/md";
 export default function SideBar() {
   const { data, status } = useSession();
   const [collapsed, setCollapsed] = useState(false);
-  const router = useRouter();
   return (
     <section className={`h-screen p-4 ${collapsed ? "w-auto" : "w-[300px]"}`}>
       <div
@@ -45,23 +44,25 @@ export default function SideBar() {
             collapsed={collapsed}
           />
           {(data?.user as any).role === "teacher" ? (
-            <SidebarItem
-              to="/dashboard/create-course"
-              icon={<MdAdd className="text-2xl" />}
-              itemName="Add new course"
-              collapsed={collapsed}
-            />
+            <>
+              <SidebarItem
+                to="/dashboard/create-course"
+                icon={<MdAdd className="text-2xl" />}
+                itemName="Add new course"
+                collapsed={collapsed}
+              />
+              <SidebarItem
+                to="/dashboard/students"
+                icon={<PiStudent className="text-2xl" />}
+                itemName="Students"
+                collapsed={collapsed}
+              />
+            </>
           ) : null}
           <SidebarItem
             to="/dashboard/courses"
             icon={<SiCoursera className="text-2xl" />}
             itemName="Courses"
-            collapsed={collapsed}
-          />
-          <SidebarItem
-            to="/students"
-            icon={<PiStudent className="text-2xl" />}
-            itemName="Students"
             collapsed={collapsed}
           />
           <SidebarItem

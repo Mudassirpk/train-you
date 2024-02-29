@@ -14,8 +14,7 @@ import Link from "next/link";
 
 export default function Account() {
   const { data: session, status } = useSession();
-  console.log(session?.user)
-  return (
+  return status === "authenticated" ? (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className={"flex gap-2 cursor-pointer rounded-lg items-center"}>
@@ -23,9 +22,7 @@ export default function Account() {
             <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
           </Avatar>
           <div className={"flex p-1 flex-col items-start"}>
-            <p className={"text-lg text-white"}>
-              {status === "authenticated" ? "MSKHAN" : "Account"}
-            </p>
+            <p className={"text-lg text-white"}>{session?.user?.name}</p>
           </div>
         </div>
       </DropdownMenuTrigger>
@@ -37,9 +34,7 @@ export default function Account() {
             Settings
           </DropdownMenuItem>
           <DropdownMenuItem className={"cursor-pointer"}>
-            <Link href={'/dashboard'}>
-              Dashboard
-            </Link>
+            <Link href={"/dashboard"}>Dashboard</Link>
           </DropdownMenuItem>
           <DropdownMenuItem className={"cursor-pointer"}>
             Logout
@@ -47,5 +42,12 @@ export default function Account() {
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
+  ) : (
+    <Link
+      href={"/login"}
+      className="bg-white rounded-lg px-2 py-2 text-indigo-600 hover:bg-indigo-600 border border-transparent hover:border-white hover:text-white"
+    >
+      Account
+    </Link>
   );
 }
