@@ -3,7 +3,8 @@ import Image from "next/image";
 
 export default function MediaPreview({ media }: { media: File }) {
   return (
-    <section className="w-full h-[300px] relative rounded-lg border-gray-300 border-2">
+    <section className="w-full h-[300px] overflow-hidden relative rounded-lg border-gray-300 border-2">
+      
       {media.type.startsWith("image/") ? (
         <Image
           className="object-contain"

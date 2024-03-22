@@ -20,14 +20,12 @@ export default function SideBar() {
   return (
     <section className={`h-screen p-4 ${collapsed ? "w-auto" : "w-[300px]"}`}>
       <div
-        className={`border-2 h-full ${
-          collapsed ? "px-0 py-2" : "p-2"
-        } flex flex-col rounded-lg border-indigo-600`}
+        className={`border-2 h-full ${collapsed ? "px-0 py-2" : "p-2"
+          } flex flex-col rounded-lg border-indigo-600`}
       >
         <div
-          className={`flex items-center ${
-            collapsed ? "justify-center" : "w-full justify-between"
-          }`}
+          className={`flex items-center ${collapsed ? "justify-center" : "w-full justify-between"
+            }`}
         >
           {!collapsed ? <UserProfile /> : null}
           <TbLayoutSidebarLeftCollapse
