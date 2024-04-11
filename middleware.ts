@@ -12,8 +12,10 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    "/((?!api||_next/static|_next/image|favicon.ico|login|signup).*)",
-    '/dashboard'
+    "/((?!||_next/static|_next/image|favicon.ico|login|signup).*)",
+    '/dashboard',
+    '/course/create-course',
+    '/course/get-courses'
   ],
 };
 
@@ -21,6 +23,7 @@ export default withAuth((req) => {
   const cookie = cookies();
   const next_auth_session_token = cookie.get("next-auth.session-token");
   if (next_auth_session_token && next_auth_session_token.value) {
+    console.log(cookie,' : ',next_auth_session_token)
   } else {
     return NextResponse.redirect(new URL("/login", req.url));
   }

@@ -1,11 +1,25 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
-type Props = {};
+type Props = {
+  title: string;
+  description: string;
+  thumbnail: string;
+};
 
 function Course({}: Props) {
+  const { isFetched, data } = useQuery({
+    queryKey: ["get-courses"],
+    queryFn: async () => await axios.get("/api/course/get-courses"),
+  });
+
+  if (isFetched) console.log(data);
+
   return (
     <div className="w-full px-2 rounded-lg border-2 border-indigo-600 flex gap-2 items-center ">
       <div className="h-16 w-16 relative rounded-lg overflow-hidden">
