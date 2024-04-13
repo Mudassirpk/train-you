@@ -60,8 +60,8 @@ export default function AddNewCourse() {
 
       const newCourse = {
         ...course,
-        thumbnail: thumbnailUploaded.fileUrl,
-        media: mediaUploaded.map((medium) => medium?.fileUrl),
+        thumbnail: thumbnailUploaded,
+        media: mediaUploaded,
       };
 
       mutate(newCourse);

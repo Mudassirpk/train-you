@@ -1,9 +1,20 @@
+"use client";
 import MediaCarousal from "@/components/Courses/MediaCarousal";
 import Ratting from "@/components/Courses/Ratting";
 import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 
 export default function Details() {
+  const { course_id } = useParams();
+
+  const {} = useQuery({
+    queryKey: ["single-user-course"],
+    queryFn: async () => await axios.get(`/api/course/get-course/${course_id}`),
+  });
+
   return (
     <main className="px-12 w-full mx-auto h-auto">
       <section className="w-full mt-6 bg-gray-50 px-4 rounded-tr-lg rounded-tl-lg">

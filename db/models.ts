@@ -30,7 +30,7 @@ const UserSchema = new mongoose.Schema(
     admin: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     teacher: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
-  { timstamps: true }
+  { timestamps: true }
 );
 
 // Define the model for Event
@@ -43,7 +43,7 @@ const EventSchema = new mongoose.Schema(
     admin: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     mediaId: { type: mongoose.Schema.Types.ObjectId, ref: "Media" },
   },
-  { timstamps: true }
+  { timestamps: true }
 );
 
 // Define the model for Enrollment
@@ -54,7 +54,7 @@ const EnrollmentSchema = new mongoose.Schema(
     status: String,
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
-  { timstamps: true }
+  { timestamps: true }
 );
 
 // Define the model for Lesson
@@ -65,7 +65,7 @@ const LessonSchema = new mongoose.Schema(
     thumbnail: String,
     mediaId: { type: mongoose.Schema.Types.ObjectId, ref: "Media" },
   },
-  { timstamps: true }
+  { timestamps: true }
 );
 
 // Define the model for Media
@@ -77,18 +77,17 @@ const MediaSchema = new mongoose.Schema(
     lessons: [{ type: mongoose.Schema.Types.ObjectId, ref: "Lesson" }],
     courses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
   },
-  { timstamps: true }
+  { timestamps: true }
 );
 
 // Define the model for Image
 const ImageSchema = new mongoose.Schema(
   {
-    title: String,
-    description: String,
     url: String,
+    key: String,
     mediaId: { type: mongoose.Schema.Types.ObjectId, ref: "Media" },
   },
-  { timstamps: true }
+  { timestamps: true }
 );
 
 // Define the model for Video
@@ -97,9 +96,10 @@ const VideoSchema = new mongoose.Schema(
     title: String,
     description: String,
     url: String,
+    key: String,
     mediaId: { type: mongoose.Schema.Types.ObjectId, ref: "Media" },
   },
-  { timstamps: true }
+  { timestamps: true }
 );
 
 // Define the model for Certificate
@@ -107,7 +107,7 @@ const CertificateSchema = new mongoose.Schema(
   {
     studentId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
-  { timstamps: true }
+  { timestamps: true }
 );
 
 // Define the model for Course
@@ -120,7 +120,7 @@ const CourseSchema = new mongoose.Schema(
     enrollments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Enrollment" }],
     mediaId: { type: mongoose.Schema.Types.ObjectId, ref: "Media" },
   },
-  { timstamps: true }
+  { timestamps: true }
 );
 
 // Define the model for Venue
@@ -128,7 +128,7 @@ const VenueSchema = new mongoose.Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
-  { timstamps: true }
+  { timestamps: true }
 );
 
 // Define the model for Coupan
@@ -139,7 +139,7 @@ const CoupanSchema = new mongoose.Schema(
     code: String,
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
-  { timstamps: true }
+  { timestamps: true }
 );
 
 // Create and export the mongoose models

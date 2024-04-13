@@ -1,6 +1,10 @@
 import { DANGEROUS__uploadFiles } from "uploadthing/client";
 
-type TFileUploadResponse = { fileKey: string; fileUrl: string } | void;
+type TFileUploadResponse = {
+  fileKey: string;
+  fileUrl: string;
+  type: "video" | "image";
+} | void;
 
 export async function uploadFile(file: File): Promise<TFileUploadResponse> {
   const response = await DANGEROUS__uploadFiles({
@@ -11,6 +15,7 @@ export async function uploadFile(file: File): Promise<TFileUploadResponse> {
     return {
       fileKey: response[0].fileKey,
       fileUrl: response[0].fileUrl,
+      type: file.type.includes("image/") ? "image" : "video",
     };
   }
 }
