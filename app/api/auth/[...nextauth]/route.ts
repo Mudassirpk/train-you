@@ -4,12 +4,6 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcryptjs from "bcryptjs";
 
-const p_cred = {
-  id: "1",
-  email: "ms@gmail.com",
-  password: "123",
-};
-
 const options: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -37,7 +31,6 @@ const options: NextAuthOptions = {
             user.password
           );
           if (!password_matched) return null;
-          console.log("user: ", user);
           return user;
         } catch (error) {
           console.log(error);
@@ -66,9 +59,9 @@ const options: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === "development",
-  pages:{
-    signIn:'/login',
-  }
+  pages: {
+    signIn: "/login",
+  },
 };
 
 const handler = NextAuth(options);
