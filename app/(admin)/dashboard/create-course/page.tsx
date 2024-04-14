@@ -4,19 +4,72 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { createCourseSchema, createCourseType } from "@/zod/schema";
-import { FormEvent, useEffect, useState } from "react";
+import { createCourseSchema, TCreateCourseType } from "@/zod/schema";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import MediaGrid from "@/components/media-grid";
+import { uploadFile, uploadFiles } from "@/app/services/media/uploadFiles";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import Loading from "@/components/loading";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function AddNewCourse() {
+  const { toast } = useToast();
   const [thumbnail, setThumbnail] = useState<File | undefined>();
   const [media, setMedia] = useState<File[]>([]);
-  const { register, getValues, setValue } = useForm<createCourseType>({
+  const [filesUploadInProgress, setFilesUploadInProgress] = useState(false);
+
+  const {
+    handleSubmit,
+    register,
+    getValues,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm<TCreateCourseType>({
     resolver: zodResolver(createCourseSchema),
   });
+
+  const { mutate, status } = useMutation({
+    mutationKey: ["create-course"],
+    mutationFn: async (course: any) =>
+      await axios.post("/api/course/create-course", course),
+    onSuccess(data) {
+      if (data?.data.success) {
+        reset();
+        setMedia([]);
+        setThumbnail(undefined);
+        toast({
+          title: "Create Course",
+          description: data?.data.message,
+        });
+      }
+    },
+  });
+
+  async function createCourse(course: TCreateCourseType) {
+    setFilesUploadInProgress(true);
+    const thumbnailUploaded = await uploadFile(course.thumbnail);
+    const mediaUploaded = await uploadFiles(course.media);
+
+    if (thumbnailUploaded && mediaUploaded) {
+      setFilesUploadInProgress(false);
+
+      const newCourse = {
+        ...course,
+        thumbnail: thumbnailUploaded,
+        media: mediaUploaded,
+      };
+
+      mutate(newCourse);
+    } else {
+      setFilesUploadInProgress(false);
+      console.log("could not upload files");
+    }
+  }
 
   return (
     <main className="flex-1 h-screen py-4 pr-4">
@@ -29,10 +82,9 @@ export default function AddNewCourse() {
         <Separator className="my-2" />{" "}
         <div className="w-full flex-1 p-4 overflow-y-scroll">
           <form
-            onSubmit={(e: FormEvent) => {
-              e.preventDefault();
-              console.log(getValues("thumbnail"));
-            }}
+            onSubmit={handleSubmit(async (course: TCreateCourseType) => {
+              await createCourse(course);
+            })}
             className="w-full flex flex-col gap-4"
           >
             <Label className="space-y-2">
@@ -91,11 +143,24 @@ export default function AddNewCourse() {
               />
             </Label>
             <MediaGrid media={media} />
+
             <Button
+              disabled={status === "pending" || filesUploadInProgress}
               type="submit"
-              className="w-full bg-indigo-600 text-white hover:bg-indigo-500"
+              className="w-full bg-indigo-600 text-white hover:bg-indigo-500 disabled:bg-gray-200"
             >
-              Create course
+              {status === "pending" || filesUploadInProgress ? (
+                <Loading
+                  textColor="gray-800"
+                  message={
+                    filesUploadInProgress
+                      ? "Uploading course media"
+                      : "Saving course information"
+                  }
+                />
+              ) : (
+                "Create Course"
+              )}
             </Button>
           </form>
         </div>
