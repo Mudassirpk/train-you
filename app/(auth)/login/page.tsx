@@ -20,11 +20,16 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
     const res = await signIn("credentials", { ...creds, redirect: false });
+    console.log("res: ", res);
     if (res?.status === 200) {
+        setError(null);
       setIsLoading(false);
-      setError(null);
-      setSuccess("Login successfull redirecting to your dashboard");
-      router.push("/dashboard");
+      if (res.error) {
+        setError(res.error as string);
+      } else {
+        setSuccess("Login successfull redirecting to your dashboard");
+        router.push("/dashboard");
+      }
     } else {
       setIsLoading(false);
       setError("Invalid email or password");

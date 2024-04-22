@@ -31,6 +31,8 @@ const options: NextAuthOptions = {
             user.password
           );
           if (!password_matched) return null;
+          if (!user.details.verified)
+            return { error: "User email is not verified" };
           return user;
         } catch (error) {
           console.log(error);
@@ -39,6 +41,10 @@ const options: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async signIn({ user }) {
+      if ((user as any).error) throw new Error((user as any).error as string);
+      return true;
+    },
     async jwt({ token, user, session }) {
       if (user) {
         token.role = (user as any).role;
