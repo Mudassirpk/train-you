@@ -1,6 +1,6 @@
 import { DANGEROUS__uploadFiles } from "uploadthing/client";
 
-type TFileUploadResponse = {
+export type TFileUploadResponse = {
   fileKey: string;
   fileUrl: string;
   type: "video" | "image";
