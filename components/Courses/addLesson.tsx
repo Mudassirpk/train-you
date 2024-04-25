@@ -10,10 +10,15 @@ import { TLesson, lessonSchema } from "@/zod/schema";
 import { register } from "module";
 import MediaPreview from "../media-preview";
 import MediaGrid from "../media-grid";
+import { uploadFile, uploadFiles } from "@/app/services/media/uploadFiles";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { useParams } from "next/navigation";
 
 type Props = {};
 
 function AddLesson({}: Props) {
+  const {courseId} = useParams()
   const [thumbnail, setThumbnail] = useState<File | undefined>();
   const [media, setMedia] = useState<File[]>([]);
 
@@ -25,13 +30,35 @@ function AddLesson({}: Props) {
     setValue,
   } = useForm<TLesson>({ resolver: zodResolver(lessonSchema) });
 
+  const {} = useMutation({
+    mutationKey:['create-lesson'],
+    mutationFn:async ()=> await axios.post(`/api/course/add-lesson/${}`)
+  })
+
+  async function createLesson(data: TLesson) {
+    if (thumbnail && media.length > 0) {
+      const thumbnailUploaded = await uploadFile(data.thumbnail);
+      const mediaUploaded = await uploadFiles(data.media);
+
+      const newLesson = {
+        ...data,
+        thumbnail: thumbnailUploaded,
+        media: mediaUploaded,
+      };
+    }
+    console.log(data);
+  }
+
   return (
     <Modal
       title="Add new lesson"
       triggerTitle="Add Lesson"
       description="Add new lesson"
     >
-      <form className="flex flex-col gap-4">
+      <form
+        onSubmit={handleSubmit(createLesson)}
+        className="flex flex-col gap-4"
+      >
         <Label className="w-full flex gap-2 flex-col">
           <span>Title</span>
           <Input
@@ -90,7 +117,7 @@ function AddLesson({}: Props) {
           />
           <MediaGrid media={media} />
         </Label>
-        <Button className="w-full py-2 rounded-xl text-white font-semibold bg-indigo-600 bg-indigo-500">
+        <Button className="w-full py-2 rounded-xl text-white font-semibold bg-indigo-600 hover:bg-indigo-500">
           Add Lesson
         </Button>
       </form>
