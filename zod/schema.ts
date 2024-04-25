@@ -1,5 +1,6 @@
 import z, { TypeOf } from "zod";
-
+import { TFileUploadResponse } from "@/app/services/media/uploadFiles";
+import { TbFileUpload } from "react-icons/tb";
 export const createCourseSchema = z.object({
   title: z
     .string()
