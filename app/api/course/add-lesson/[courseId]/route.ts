@@ -43,7 +43,10 @@ export async function POST(
       title: lessonData.title,
       description: lessonData.description,
       thumbnail: lessonData.thumbnail,
+      mediaId:media._id
     });
+
+    await newLesson.save()
 
     const updatedCourse = await Course.findOneAndUpdate(
       {
@@ -51,7 +54,7 @@ export async function POST(
       },
       {
         lessons: {
-          $push: newLesson,
+          $push: newLesson._id,
         },
       }
     );
