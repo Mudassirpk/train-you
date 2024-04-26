@@ -9,7 +9,7 @@ export const ourFileRouter = {
       return { success: true };
     }
   ),
-  video: f({ video: { maxFileSize: "16MB" } }).onUploadComplete(
+  videoUploader: f({ video: { maxFileSize: "16MB" } }).onUploadComplete(
     async ({ file }: any) => {
       console.log("file url", file.url);
       return { success: true };

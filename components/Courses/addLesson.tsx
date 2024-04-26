@@ -18,7 +18,7 @@ import { useParams } from "next/navigation";
 type Props = {};
 
 function AddLesson({}: Props) {
-  const {courseId} = useParams()
+  const { courseId } = useParams();
   const [thumbnail, setThumbnail] = useState<File | undefined>();
   const [media, setMedia] = useState<File[]>([]);
 
@@ -30,10 +30,11 @@ function AddLesson({}: Props) {
     setValue,
   } = useForm<TLesson>({ resolver: zodResolver(lessonSchema) });
 
-  const {} = useMutation({
-    mutationKey:['create-lesson'],
-    mutationFn:async ()=> await axios.post(`/api/course/add-lesson/${}`)
-  })
+  const { data, status } = useMutation({
+    mutationKey: ["create-lesson"],
+    mutationFn: async () =>
+      await axios.post(`/api/course/add-lesson/${courseId}`),
+  });
 
   async function createLesson(data: TLesson) {
     if (thumbnail && media.length > 0) {
@@ -45,8 +46,8 @@ function AddLesson({}: Props) {
         thumbnail: thumbnailUploaded,
         media: mediaUploaded,
       };
+      console.log(newLesson);
     }
-    console.log(data);
   }
 
   return (
@@ -92,12 +93,10 @@ function AddLesson({}: Props) {
         </Label>
         <Label className="w-full flex gap-2 flex-col">
           <span>
-            Media{" "}
-            <span className="text-gray-700">
-              (Videos/Images for the lesson)
-            </span>
+            Media <span className="text-gray-700">(Videos for the lesson)</span>
           </span>
           <Input
+            accept=".mp4"
             className="cursor-pointer"
             onChange={(e) => {
               if (e.target.files) {
