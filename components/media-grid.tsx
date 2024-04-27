@@ -9,10 +9,10 @@ function MediaGrid({ media, sourceAsUrl }: Props) {
   return (
     <div className="w-full p-2 rounded-lg border-2 border-gray-300 flex flex-wrap gap-1">
       {media.length > 0 ? (
-        media.map((medium: File) => (
+        media.map((medium: File, index: number) => (
           <MediaPreview
             media={medium}
-            key={medium.name}
+            key={index}
             sourceAsUrl={sourceAsUrl}
           />
         ))
