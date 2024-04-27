@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import MediaGrid from "@/components/media-grid";
 import Modal from "@/components/modal";
 import AddLesson from "@/components/Courses/addLesson";
+import Link from "next/link";
 type Props = {};
 
 function page({}: Props) {
@@ -77,7 +78,15 @@ function page({}: Props) {
                 </p>
               </div>
             </div>
-            <AddLesson />
+            <div className="flex justify-between gap-2 items-center">
+              <Link
+                href={`/dashboard/courses/lessons?courseId=${courseId}`}
+                className="bg-indigo-600 py-2 px-4 text-white  rounded-xl hover:bg-indigo-500"
+              >
+                Lessons
+              </Link>
+              <AddLesson />
+            </div>
           </div>
           <div className="full">
             <MediaGrid
