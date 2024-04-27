@@ -40,7 +40,6 @@ export async function POST(req: NextRequest) {
       { email: user_data.email, code: verificationCode },
       process.env.EMAIL_VERIFICATION_TOKEN!
     );
-    console.log('token created: ',verificationToken)
 
     const new_user = new User({
       name: user_data.name,
