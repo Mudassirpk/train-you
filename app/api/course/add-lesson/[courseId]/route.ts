@@ -15,6 +15,7 @@ export async function POST(
     const lessonMedia = lessonData.media;
 
     const media = new Media({});
+    await media.save();
 
     const images = [];
     const videos = [];
@@ -43,28 +44,37 @@ export async function POST(
       title: lessonData.title,
       description: lessonData.description,
       thumbnail: lessonData.thumbnail,
-      mediaId:media._id
+      mediaId: media._id.toString(),
     });
 
-    await newLesson.save()
+    console.log("new lesson: ", newLesson);
+
+    await Media.findOneAndUpdate(
+      { _id: media._id },
+      {
+        videos,
+        images,
+        lessons: [newLesson._id.toString()],
+      }
+    );
+
+    await newLesson.save();
 
     const updatedCourse = await Course.findOneAndUpdate(
       {
         _id: courseId,
       },
       {
-        lessons: {
-          $push: newLesson._id,
+        $push: {
+          lessons: newLesson._id.toString(),
         },
       }
     );
 
-    if (updatedCourse)
-      return NextResponse.json({
-        success: true,
-        data: updatedCourse,
-      });
-
+    return NextResponse.json({
+      success: true,
+      data: updatedCourse,
+    });
   } catch (error) {
     console.log(error);
   }
