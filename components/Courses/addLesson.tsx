@@ -14,14 +14,17 @@ import { uploadFile, uploadFiles } from "@/app/services/media/uploadFiles";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "next/navigation";
+import Loading from "../loading";
+import { useToast } from "../ui/use-toast";
 
 type Props = {};
 
 function AddLesson({}: Props) {
+  const { toast } = useToast();
   const { courseId } = useParams();
   const [thumbnail, setThumbnail] = useState<File | undefined>();
   const [media, setMedia] = useState<File[]>([]);
-
+  const [uploadingMedia, setUploadingMedia] = useState(false);
   const {
     formState: { errors },
     register,
@@ -30,23 +33,36 @@ function AddLesson({}: Props) {
     setValue,
   } = useForm<TLesson>({ resolver: zodResolver(lessonSchema) });
 
-  const { data, status } = useMutation({
+  const { data, status, mutate } = useMutation({
     mutationKey: ["create-lesson"],
-    mutationFn: async () =>
-      await axios.post(`/api/course/add-lesson/${courseId}`),
+    mutationFn: async ({ lesson }: { lesson: any }) =>
+      await axios.post(`/api/course/add-lesson/${courseId}`, lesson),
+    onSuccess(data) {
+      if (data?.data.success) {
+        toast({
+          title: "Add Lesson",
+          description: "Lesson added successfulyy"
+        });
+      }
+    },
   });
 
   async function createLesson(data: TLesson) {
     if (thumbnail && media.length > 0) {
+      setUploadingMedia(true);
       const thumbnailUploaded = await uploadFile(data.thumbnail);
       const mediaUploaded = await uploadFiles(data.media);
 
-      const newLesson = {
-        ...data,
-        thumbnail: thumbnailUploaded,
-        media: mediaUploaded,
-      };
-      console.log(newLesson);
+      if (thumbnailUploaded && mediaUploaded) {
+        setUploadingMedia(false);
+        const newLesson = {
+          ...data,
+          thumbnail: thumbnailUploaded.fileUrl,
+          media: mediaUploaded,
+        };
+
+        mutate({ lesson: newLesson });
+      }
     }
   }
 
@@ -116,8 +132,22 @@ function AddLesson({}: Props) {
           />
           <MediaGrid media={media} />
         </Label>
-        <Button className="w-full py-2 rounded-xl text-white font-semibold bg-indigo-600 hover:bg-indigo-500">
-          Add Lesson
+        <Button
+          disabled={status === "pending" || uploadingMedia}
+          type="submit"
+          className="disabled:bg-gray-300 w-full py-2 rounded-xl text-white font-semibold bg-indigo-600 hover:bg-indigo-500"
+        >
+          {status === "pending" || uploadingMedia ? (
+            <Loading
+              message={
+                uploadingMedia
+                  ? "Uploading lesson media"
+                  : "saving lesson information"
+              }
+            />
+          ) : (
+            "Add Lesson"
+          )}
         </Button>
       </form>
     </Modal>
