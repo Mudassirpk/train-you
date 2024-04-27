@@ -122,6 +122,7 @@ export default function AddNewCourse() {
             <Label className="space-y-2 cursor-pointer">
               <span>Media (contains course images and videos)</span>
               <Input
+                accept="image/jpeg, image/png, image/gif, video/mp4"
                 className="cursor-pointer"
                 onChange={(e) => {
                   if (e.target.files) {
