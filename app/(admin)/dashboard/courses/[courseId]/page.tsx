@@ -11,57 +11,61 @@ import MediaGrid from "@/components/media-grid";
 import AddLesson from "@/components/Courses/addLesson";
 import Link from "next/link";
 import { useToast } from "@/components/ui/use-toast";
+import ConfirmDelete from "@/components/confirmDelete";
 
 type Props = {};
 
-function page({ }: Props) {
-  const router = useRouter()
-  const { toast } = useToast()
+function page({}: Props) {
+  const router = useRouter();
+  const { toast } = useToast();
   const { courseId } = useParams();
   const { data, isFetching } = useQuery({
     queryKey: ["single-user-course"],
     queryFn: async () => await axios.get(`/api/course/${courseId}`),
   });
 
-
   const { status: deleteCourseMediaStatus, mutate: deleteMedia } = useMutation({
-    mutationKey: ['delete-course-media'],
-    mutationFn: async ({ urls }: { urls: string[] }) => await axios.delete('/api/uploadthing', {
-      data: { urls }
-    }),
-    onSuccess(data) {
-      if (data?.data.success)
-        toast({
-          title: "Delete course",
-          description: "Course deleted successfully"
-        })
-      router.push('/dashboard/courses')
-    }
-  })
-
-  function deleteCourseMedia() {
-    const course = data?.data.course
-    const urls = [course.thumbnail]
-
-    for (let video of course.mediaId.videos) {
-      urls.push(video.url)
-    }
-    for (let image of course.mediaId.images) {
-      urls.push(image.url)
-    }
-
-    deleteMedia({ urls })
-  }
-
-  const { status, mutate } = useMutation({
-    mutationKey: ['delete-course'],
-    mutationFn: async () => await axios.delete(`/api/course/delete?courseId=${courseId}`),
+    mutationKey: ["delete-course-media"],
+    mutationFn: async ({ urls }: { urls: string[] }) =>
+      await axios.delete("/api/uploadthing", {
+        data: { urls },
+      }),
     onSuccess(data) {
       if (data?.data.success) {
-        deleteCourseMedia()
+        toast({
+          title: "Delete course",
+          description: "Course deleted successfully",
+        });
+        router.push("/dashboard/courses");
       }
+    },
+  });
+
+  function deleteCourseMedia() {
+    const course = data?.data.course;
+    const urls = [course.thumbnail];
+
+    for (let video of course.mediaId.videos) {
+      urls.push(video.url);
     }
-  })
+    for (let image of course.mediaId.images) {
+      urls.push(image.url);
+    }
+
+    deleteMedia({ urls });
+  }
+
+  const { status, mutate, reset } = useMutation({
+    mutationKey: ["delete-course"],
+    mutationFn: async () =>
+      await axios.delete(`/api/course/delete?courseId=${courseId}`),
+    onSuccess(data) {
+      if (data?.data.success) {
+        reset();
+        deleteCourseMedia();
+      }
+    },
+  });
 
   return (
     <section className="w-full p-2 h-screen overflow-y-scroll flex flex-col">
@@ -89,11 +93,11 @@ function page({ }: Props) {
               <Button className="bg-indigo-800 hover:bg-indigo-600">
                 Edit
               </Button>
-              <Button disabled={status === 'pending' || deleteCourseMediaStatus === 'pending'}
-                onClick={() => mutate()}
-                className="bg-white hover:bg-red-700 hover:text-white text-red-700 font-semibold">
-                {status === 'pending' || deleteCourseMediaStatus === 'pending' ? <Loading /> : "Delete"}
-              </Button>
+              <ConfirmDelete
+                item={data?.data.course.title}
+                status={status === "pending" ? status : deleteCourseMediaStatus}
+                onConfirm={mutate}
+              />
             </div>
           </div>
           <div className="w-full flex justify-between items-center px-2">
