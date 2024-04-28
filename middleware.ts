@@ -23,7 +23,6 @@ export default withAuth((req) => {
   const cookie = cookies();
   const next_auth_session_token = cookie.get("next-auth.session-token");
   if (next_auth_session_token && next_auth_session_token.value) {
-    console.log(cookie,' : ',next_auth_session_token)
   } else {
     return NextResponse.redirect(new URL("/login", req.url));
   }
