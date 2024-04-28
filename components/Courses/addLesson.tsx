@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import Modal from "../modal";
 import { Input } from "../ui/input";
@@ -13,7 +14,7 @@ import MediaGrid from "../media-grid";
 import { uploadFile, uploadFiles } from "@/app/services/media/uploadFiles";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import Loading from "../loading";
 import { useToast } from "../ui/use-toast";
 
@@ -22,6 +23,8 @@ type Props = {};
 function AddLesson({}: Props) {
   const { toast } = useToast();
   const { courseId } = useParams();
+  const searchParams = useSearchParams();
+
   const [thumbnail, setThumbnail] = useState<File | undefined>();
   const [media, setMedia] = useState<File[]>([]);
   const [uploadingMedia, setUploadingMedia] = useState(false);
@@ -36,12 +39,17 @@ function AddLesson({}: Props) {
   const { data, status, mutate } = useMutation({
     mutationKey: ["create-lesson"],
     mutationFn: async ({ lesson }: { lesson: any }) =>
-      await axios.post(`/api/course/add-lesson/${courseId}`, lesson),
+      await axios.post(
+        `/api/course/add-lesson/${
+          courseId ? courseId : searchParams.get("courseId")
+        }`,
+        lesson
+      ),
     onSuccess(data) {
       if (data?.data.success) {
         toast({
           title: "Add Lesson",
-          description: "Lesson added successfulyy"
+          description: "Lesson added successfulyy",
         });
       }
     },
@@ -68,6 +76,7 @@ function AddLesson({}: Props) {
 
   return (
     <Modal
+  
       title="Add new lesson"
       triggerTitle="Add Lesson"
       description="Add new lesson"

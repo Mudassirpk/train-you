@@ -22,11 +22,6 @@ export default function Lessions() {
       ),
   });
 
-  console.log(
-    data?.data.lessons[0].mediaId.videos.map((video: any) => {
-      return { ...video, type: "video" };
-    })
-  );
 
   return (
     <section className="w-full">

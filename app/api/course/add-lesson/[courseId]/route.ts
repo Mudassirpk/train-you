@@ -47,8 +47,6 @@ export async function POST(
       mediaId: media._id.toString(),
     });
 
-    console.log("new lesson: ", newLesson);
-
     await Media.findOneAndUpdate(
       { _id: media._id },
       {
