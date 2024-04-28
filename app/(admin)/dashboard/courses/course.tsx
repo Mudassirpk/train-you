@@ -15,7 +15,7 @@ type Props = {
 
 function Course({ title, description, thumbnail,_id }: Props) {
   return (
-    <div className="w-full px-2 rounded-lg border-2 border-indigo-600 flex gap-2 items-center ">
+    <div className="w-full p-2 rounded-lg border-2 border-indigo-600 flex gap-2 items-center ">
       <div className="h-16 w-16 relative rounded-lg overflow-hidden">
         <Image
           alt="course-image"
