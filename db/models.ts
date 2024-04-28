@@ -63,7 +63,7 @@ const LessonSchema = new mongoose.Schema(
     title: String,
     description: String,
     thumbnail: String,
-    mediaId: { , ref: "Media" },
+    mediaId: { type: mongoose.Schema.Types.ObjectId, ref: "Media" },
   },
   { timestamps: true }
 );
