@@ -52,7 +52,7 @@ export async function POST(
       {
         videos,
         images,
-        lessons: [newLesson._id.toString()],
+        lesson: newLesson._id.toString(),
       }
     );
 

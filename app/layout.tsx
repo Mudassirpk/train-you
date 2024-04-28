@@ -3,12 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "./../providers/sessionprovider";
 import React from "react";
-import Account from "@/components/Account";
-import Link from "next/link";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import QueryProvider from "@/providers/queryprovider";
-import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
