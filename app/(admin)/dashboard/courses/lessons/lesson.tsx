@@ -64,8 +64,8 @@ function Lesson({ lesson, index }: Props) {
   }
 
   return (
-    <div className="w-full bg-gray-100 rounded-xl gap-2 flex flex-col items-center overflow-hidden p-1">
-      <div className="w-full flex gap-2 items-center border-b-2 mb-2 pb-2 border-white">
+    <div className="w-full bg-gray-100 rounded-xl gap-2 flex flex-col items-center overflow-hidden p-2">
+      <div className="w-full flex gap-2 items-center">
         <div className="w-[50px] h-[50px] relative rounded-xl overflow-hidden">
           <Image
             alt="lesson-thumbnail"
