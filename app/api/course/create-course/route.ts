@@ -65,6 +65,7 @@ export async function POST(request: NextRequest) {
         { status: 201 }
       );
     }
+
   } catch (err) {
     console.log(err);
   }
