@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import {
   Card,
   CardContent,
@@ -9,20 +9,48 @@ import {
 } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import HighlightText from "../searchComponent";
 
-export default function CourseCard() {
+export default function CourseCard({
+  title,
+  description,
+  thumbnail,
+}: {
+  title: string;
+  description: string;
+  thumbnail: string;
+}) {
+  const searchParams = useSearchParams();
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>A guide to being a successful person</CardTitle>
+        <CardTitle>
+          {searchParams.get("query") ? (
+            <HighlightText
+              text={title}
+              query={searchParams.get("query") as string}
+            />
+          ) : (
+            title
+          )}
+        </CardTitle>
         <CardDescription>
-          learn important tips and tricks to excel in your career.
+          {searchParams.get("query") ? (
+            <HighlightText
+              text={description}
+              query={searchParams.get("query") as string}
+            />
+          ) : (
+            description
+          )}
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className={"w-full h-[250px] relative"}>
+        <div className={"w-full h-[250px] relative rounded-xl overflow-hidden"}>
           <Image
-            src={"/teacher.jpg"}
+            src={thumbnail}
             style={{ objectFit: "cover" }}
             alt={"a picture of course"}
             fill={true}

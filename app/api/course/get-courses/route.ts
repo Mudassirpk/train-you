@@ -1,21 +1,33 @@
 import connect_db from "@/db/connection";
 import { Course, User } from "@/db/models";
 import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { Media } from "@/db/models";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const query = req.nextUrl.searchParams.get("query");
+  const is_public = req.nextUrl.searchParams.get("is_public");
   const session = await getServerSession();
+
   await connect_db();
-  const teacher = await User.findOne({ email: session?.user?.email });
-  const courses = await Course.find({ teacherId: teacher._id }).populate({
-    path: "mediaId",
-    populate: { path: "videos images" },
-  });
-  // for (let course of courses) {
-  //   const courseMedia = await Media.findOne({ _id: course.mediaId });
-  //   course.media = courseMedia;
-  // }
+
+  let courses = [];
+
+  if (is_public) {
+    courses = await Course.find({
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { description: { $regex: query, $options: "i" } },
+      ],
+    });
+  } else {
+    const teacher = await User.findOne({ email: session?.user?.email });
+    courses = await Course.find({ teacherId: teacher._id }).populate({
+      path: "mediaId",
+      populate: { path: "videos images" },
+    });
+  }
+
   return NextResponse.json({
     success: true,
     courses,

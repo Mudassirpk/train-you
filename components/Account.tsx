@@ -11,10 +11,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import Loading from "./loading";
 
 export default function Account() {
   const { data: session, status } = useSession();
-  return status === "authenticated" ? (
+
+  return status === "loading" ? (
+    <div><Loading textColor="white" /></div>
+  ) : status === "authenticated" ? (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className={"flex gap-2 cursor-pointer rounded-lg items-center"}>
