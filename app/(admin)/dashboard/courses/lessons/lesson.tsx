@@ -1,16 +1,18 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import MediaPreview from "@/components/media-preview";
 import MediaGrid from "@/components/media-grid";
 import ConfirmDelete from "@/components/confirmDelete";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { client } from "@/providers/queryprovider";
-type Props = { lesson: any };
+import { useSearchParams } from "next/navigation";
+type Props = { lesson: any; index: number };
 
-function Lesson({ lesson }: Props) {
+function Lesson({ lesson, index }: Props) {
+  const searchParams = useSearchParams();
+
   const [detailsOpened, setDetailsOpened] = useState(false);
   const { toast } = useToast();
 
@@ -36,7 +38,10 @@ function Lesson({ lesson }: Props) {
   } = useMutation({
     mutationKey: ["delete-lesson"],
     mutationFn: async () =>
-      await axios.post("/api/course/delete-lesson", { lessonId: lesson._id }),
+      await axios.post("/api/course/delete-lesson", {
+        lessonId: lesson._id,
+        courseId: searchParams.get("courseId"),
+      }),
     onSuccess(data) {
       if (data?.data.success) {
         reset();
@@ -70,7 +75,9 @@ function Lesson({ lesson }: Props) {
           />
         </div>
         <div className="flex-1 flex justify-between items-center">
-          <p className="font-semibold text-gray-800">{lesson.title}</p>
+          <p className="font-semibold text-gray-800">
+            {index + 1}. {lesson.title}
+          </p>
           <div className="flex-1 flex justify-end items-center gap-2">
             <ConfirmDelete
               onConfirm={deleteLesson}
@@ -88,10 +95,6 @@ function Lesson({ lesson }: Props) {
       </div>
       {detailsOpened ? (
         <div className="bg-white w-full p-2 rounded-xl overflow-hidden">
-          {/* <MediaPreview
-            media={{ url: lesson.thumbnail, type: "image" }}
-            sourceAsUrl={true}
-          /> */}
           <p className="mb-1 mt-4 px-2 text-xl font-semibold text-gray-800">
             {lesson.title}
           </p>

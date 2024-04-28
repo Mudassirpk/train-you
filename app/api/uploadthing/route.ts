@@ -10,7 +10,6 @@ export const { GET, POST } = createNextRouteHandler({
 
 export async function DELETE(request: NextRequest) {
   const urls: string[] = (await request.json()).urls;
-  console.log('urls: ',urls)
   const files = urls.map((url: string) =>
     url.substring(url.lastIndexOf("/") + 1)
   );

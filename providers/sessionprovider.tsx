@@ -19,8 +19,8 @@ export default function AuthProvider({
 
   return (
     <SessionProvider session={session}>
-      {children}
       {isMounted ? <Toaster /> : null}
+      {children}
     </SessionProvider>
   );
 }

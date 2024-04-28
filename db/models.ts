@@ -63,7 +63,7 @@ const LessonSchema = new mongoose.Schema(
     title: String,
     description: String,
     thumbnail: String,
-    mediaId: { type: mongoose.Schema.Types.ObjectId, ref: "Media" },
+    mediaId: { , ref: "Media" },
   },
   { timestamps: true }
 );
@@ -73,9 +73,9 @@ const MediaSchema = new mongoose.Schema(
   {
     videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
     images: [{ type: mongoose.Schema.Types.ObjectId, ref: "Image" }],
-    events: [{ type: mongoose.Schema.Types.ObjectId, ref: "Event" }],
-    lessons: [{ type: mongoose.Schema.Types.ObjectId, ref: "Lesson" }],
-    courses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
+    event: { type: mongoose.Schema.Types.ObjectId, ref: "Event" },
+    lesson: { type: mongoose.Schema.Types.ObjectId, ref: "Lesson" },
+    course: { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
   },
   { timestamps: true }
 );

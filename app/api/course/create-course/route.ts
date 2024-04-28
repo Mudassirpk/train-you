@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
       {
         videos,
         images,
-        courses: [new_course._id],
+        course: new_course._id,
       }
     );
 

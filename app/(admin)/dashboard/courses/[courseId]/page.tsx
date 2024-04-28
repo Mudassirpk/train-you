@@ -2,23 +2,66 @@
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Loading from "@/components/loading";
 import dayjs from "dayjs";
 import MediaGrid from "@/components/media-grid";
-import Modal from "@/components/modal";
 import AddLesson from "@/components/Courses/addLesson";
 import Link from "next/link";
+import { useToast } from "@/components/ui/use-toast";
+
 type Props = {};
 
-function page({}: Props) {
+function page({ }: Props) {
+  const router = useRouter()
+  const { toast } = useToast()
   const { courseId } = useParams();
   const { data, isFetching } = useQuery({
     queryKey: ["single-user-course"],
     queryFn: async () => await axios.get(`/api/course/${courseId}`),
   });
+
+
+  const { status: deleteCourseMediaStatus, mutate: deleteMedia } = useMutation({
+    mutationKey: ['delete-course-media'],
+    mutationFn: async ({ urls }: { urls: string[] }) => await axios.delete('/api/uploadthing', {
+      data: { urls }
+    }),
+    onSuccess(data) {
+      if (data?.data.success)
+        toast({
+          title: "Delete course",
+          description: "Course deleted successfully"
+        })
+      router.push('/dashboard/courses')
+    }
+  })
+
+  function deleteCourseMedia() {
+    const course = data?.data.course
+    const urls = [course.thumbnail]
+
+    for (let video of course.mediaId.videos) {
+      urls.push(video.url)
+    }
+    for (let image of course.mediaId.images) {
+      urls.push(image.url)
+    }
+
+    deleteMedia({ urls })
+  }
+
+  const { status, mutate } = useMutation({
+    mutationKey: ['delete-course'],
+    mutationFn: async () => await axios.delete(`/api/course/delete?courseId=${courseId}`),
+    onSuccess(data) {
+      if (data?.data.success) {
+        deleteCourseMedia()
+      }
+    }
+  })
 
   return (
     <section className="w-full p-2 h-screen overflow-y-scroll flex flex-col">
@@ -46,8 +89,10 @@ function page({}: Props) {
               <Button className="bg-indigo-800 hover:bg-indigo-600">
                 Edit
               </Button>
-              <Button className="bg-white hover:bg-red-700 hover:text-white text-red-700 font-semibold">
-                Delete
+              <Button disabled={status === 'pending' || deleteCourseMediaStatus === 'pending'}
+                onClick={() => mutate()}
+                className="bg-white hover:bg-red-700 hover:text-white text-red-700 font-semibold">
+                {status === 'pending' || deleteCourseMediaStatus === 'pending' ? <Loading /> : "Delete"}
               </Button>
             </div>
           </div>

@@ -17,6 +17,7 @@ import axios from "axios";
 import { useParams, useSearchParams } from "next/navigation";
 import Loading from "../loading";
 import { useToast } from "../ui/use-toast";
+import { client } from "@/providers/queryprovider";
 
 type Props = {};
 
@@ -51,6 +52,7 @@ function AddLesson({}: Props) {
           title: "Add Lesson",
           description: "Lesson added successfulyy",
         });
+        client.invalidateQueries({ queryKey: ["get-lessons"] });
       }
     },
   });
@@ -76,7 +78,6 @@ function AddLesson({}: Props) {
 
   return (
     <Modal
-  
       title="Add new lesson"
       triggerTitle="Add Lesson"
       description="Add new lesson"
