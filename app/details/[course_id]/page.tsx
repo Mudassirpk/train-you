@@ -1,6 +1,7 @@
 "use client";
 import MediaCarousal from "@/components/Courses/MediaCarousal";
 import Ratting from "@/components/Courses/Ratting";
+import AddReview from "@/components/Courses/addReview";
 import Loading from "@/components/loading";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
@@ -66,7 +67,7 @@ export default function Details() {
                   </div>
 
                   <p className="text-4xl font-semibold text-indigo-400 underline underline-offset-8 mt-4">
-                    RS 1250
+                    RS {course.price}
                   </p>
                 </div>
                 <Button className="bg-gradient-to-r px-4 py-2 rounded-lg from-indigo-800 to-indigo-600 hover:from-indigo-600 hover:to-indigo-800 text-white">
@@ -81,13 +82,23 @@ export default function Details() {
               Course Highlights
             </p>
             <div className="w-full px-12">
-              <MediaCarousal />
+              <MediaCarousal
+                media={[].concat(
+                  course.mediaId.images.map((image: any) => {
+                    return { url: image.url, type: "image" };
+                  }),
+                  course.mediaId.videos.map((video: any) => {
+                    return { url: video.url, type: "video" };
+                  })
+                )}
+              />
             </div>
           </div>
           <section className="w-full my-6">
             <h3 className="font-semibold text-xl text-indigo-800 my-4">
               Reviews
             </h3>
+            <AddReview courseId={course_id as string} />
             <div className="w-full my-6">
               <div className="flex w-full my-4 justify-between">
                 <div className="flex gap-2 items-start">

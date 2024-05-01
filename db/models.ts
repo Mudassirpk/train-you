@@ -1,3 +1,5 @@
+import { timeStamp } from "console";
+
 const mongoose = require("mongoose");
 
 // Define the model for User
@@ -110,6 +112,18 @@ const CertificateSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+const ReviewSchema = new mongoose.Schema(
+  {
+    by: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    course: { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
+    message: { type: String },
+    rattings: Number,
+  },
+  {
+    timestamps: true,
+  }
+);
+
 // Define the model for Course
 const CourseSchema = new mongoose.Schema(
   {
@@ -121,6 +135,7 @@ const CourseSchema = new mongoose.Schema(
     enrollments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Enrollment" }],
     mediaId: { type: mongoose.Schema.Types.ObjectId, ref: "Media" },
     lessons: [{ type: mongoose.Schema.Types.ObjectId, ref: "Lesson" }],
+    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
   },
   { timestamps: true }
 );
@@ -167,3 +182,5 @@ export const Venue =
   mongoose.models.Venue || mongoose.model("Venue", VenueSchema);
 export const Coupan =
   mongoose.models.Coupan || mongoose.model("Coupan", CoupanSchema);
+export const Review =
+  mongoose.models.Review || mongoose.model("Review", ReviewSchema);
