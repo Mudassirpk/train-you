@@ -1,12 +1,14 @@
-'use client'
+"use client";
 
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { client } from "@/providers/queryprovider";
 
 export default function SearchCourse() {
-  const [query, setQuery] = useState("")
+  const router = useRouter();
+  const [query, setQuery] = useState("");
 
   return (
     <section className={"w-full flex flex-col items-center gap-4 my-6"}>
@@ -14,6 +16,11 @@ export default function SearchCourse() {
         Search Courses
       </h1>
       <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          router.push(`browse?query=${query}`);
+          client.refetchQueries({ queryKey: ["get-public-courses"] });
+        }}
         className={"flex gap-2 items-center w-[800px] sm-lg:w-full sm-lg:px-4"}
       >
         <Input
@@ -23,7 +30,12 @@ export default function SearchCourse() {
           placeholder={"stereochemistry"}
           className={"flex-1"}
         />
-        <Link href={`browse?query=${query}`} className={"px-2 py-2 rounded-lg bg-indigo-800 hover:bg-indigo-600 text-white"}>
+        <Link
+          href={`browse?query=${query}`}
+          className={
+            "px-2 py-2 rounded-lg bg-indigo-800 hover:bg-indigo-600 text-white"
+          }
+        >
           Search
         </Link>
       </form>
