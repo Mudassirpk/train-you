@@ -10,10 +10,12 @@ export async function GET(
   const { id } = params;
   try {
     await connect_db();
-    const course = await Course.findOne({ _id: id }).populate({
-      path: "mediaId",
-      populate: { path: "images videos" },
-    });
+    const course = await Course.findOne({ _id: id })
+      .populate({
+        path: "mediaId",
+        populate: { path: "images videos" },
+      })
+      .populate({ path: "teacherId", select: "name _id" });
 
     return NextResponse.json({
       success: true,
