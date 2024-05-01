@@ -16,10 +16,12 @@ export default function CourseCard({
   title,
   description,
   thumbnail,
+  courseId,
 }: {
   title: string;
   description: string;
   thumbnail: string;
+  courseId: string;
 }) {
   const searchParams = useSearchParams();
 
@@ -60,7 +62,7 @@ export default function CourseCard({
       <CardFooter className={"flex justify-between items-center"}>
         <div>5 star ratings</div>
         <Link
-          href={`/details/3`}
+          href={`/details/${courseId}`}
           className={
             "bg-gradient-to-r px-4 py-2 rounded-lg from-indigo-800 to-indigo-600 hover:from-indigo-600 hover:to-indigo-800 text-white"
           }

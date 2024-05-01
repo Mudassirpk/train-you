@@ -31,6 +31,8 @@ export default function CoursesGrid() {
         data?.data.courses.map((course: any) => {
           return (
             <CourseCard
+              key={course._id}
+              courseId={course._id}
               title={course.title}
               description={course.description}
               thumbnail={course.thumbnail}
