@@ -116,6 +116,7 @@ const CourseSchema = new mongoose.Schema(
     title: String,
     description: String,
     thumbnail: String,
+    price: Number,
     teacherId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     enrollments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Enrollment" }],
     mediaId: { type: mongoose.Schema.Types.ObjectId, ref: "Media" },

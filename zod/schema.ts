@@ -21,6 +21,9 @@ export const createCourseSchema = z.object({
     .refine((files: File[]) => files.length !== 0, {
       message: "Please select at least one media(Image/Video) for your course.",
     }),
+  price: z
+    .number()
+    .min(1, { message: "Price should be greater than zero (0)" }),
 });
 
 export type TCreateCourseType = z.infer<typeof createCourseSchema>;
