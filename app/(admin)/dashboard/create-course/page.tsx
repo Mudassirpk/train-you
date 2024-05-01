@@ -145,6 +145,14 @@ export default function AddNewCourse() {
             </Label>
             <MediaGrid media={media} />
 
+            <Label className="space-y-2">
+              <span>Price</span>
+              <Input
+                {...register("price", { valueAsNumber: true })}
+                type="number"
+              />
+            </Label>
+
             <Button
               disabled={status === "pending" || filesUploadInProgress}
               type="submit"
