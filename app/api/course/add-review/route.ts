@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     const newReview = new Review({
       by: byUser._id,
       message: body.message,
-      rattings: body.rattins,
+      rattings: body.rattings,
       course: body.courseId,
     });
 
@@ -31,12 +31,10 @@ export async function POST(req: NextRequest) {
 
     await newReview.save();
 
-    console.log("nr: ", newReview, "\n", "uc: ", updateCourse);
+    return NextResponse.json({
+      success: true,
+    });
   } catch (err) {
     console.log(err);
   }
-  console.log(body);
-  return NextResponse.json({
-    h: "i",
-  });
 }

@@ -1,13 +1,16 @@
 "use client";
 import MediaCarousal from "@/components/Courses/MediaCarousal";
-import Ratting from "@/components/Courses/Ratting";
 import AddReview from "@/components/Courses/addReview";
+import Ratting from "@/components/Courses/ratting";
 import Loading from "@/components/loading";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
 import { useParams } from "next/navigation";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 export default function Details() {
   const { course_id } = useParams();
@@ -98,35 +101,47 @@ export default function Details() {
             <h3 className="font-semibold text-xl text-indigo-800 my-4">
               Reviews
             </h3>
-            <AddReview courseId={course_id as string} />
-            <div className="w-full my-6">
-              <div className="flex w-full my-4 justify-between">
-                <div className="flex gap-2 items-start">
-                  <div className="relative w-16 h-14 overflow-hidden rounded-lg">
-                    <Image
-                      alt="commentor"
-                      style={{ objectFit: "cover" }}
-                      src={"/person.jpg"}
-                      fill={true}
-                    />
+            <div className="w-full my-8">
+              <AddReview courseId={course_id as string} />
+            </div>
+            <div className="w-full my-4 flex flex-col gap-2">
+              {course.reviews.map((review: any) => {
+                return (
+                  <div className="w-full my-6">
+                    <div className="flex w-full my-4 justify-between">
+                      <div className="flex gap-2 items-start">
+                        <div className="relative w-16 h-14 overflow-hidden rounded-lg">
+                          <Image
+                            alt="commentor"
+                            style={{ objectFit: "cover" }}
+                            src={"/person.jpg"}
+                            fill={true}
+                          />
+                        </div>
+                        <div>
+                          <p className="text-xl text-gray-800 font-semibold">
+                            {review.by.name}
+                          </p>
+                          <p className="text-gray-700">
+                            Member since{" "}
+                            {dayjs(review.by.createdAt).format("MMMM")},{" "}
+                            {dayjs(review.by.createdAt).get("year")}
+                          </p>
+                        </div>
+                      </div>
+                      <div>
+                        <p className="mb-2">
+                          {dayjs(review.createdAt).fromNow().toString()}{" "}
+                        </p>
+                        <Ratting rattings={parseInt(review.rattings)} />
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-b from-white to-gray-50 shadow-sm rounded-lg p-2">
+                      <p className="">{review.message} </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xl text-gray-800 font-semibold">
-                      Aloe Smit
-                    </p>
-                    <p className="text-gray-700">Member since Feb, 2024</p>
-                  </div>
-                </div>
-                <div>
-                  <p className="mb-2">2 Months ago</p>
-                  <Ratting />
-                </div>
-              </div>
-              <div className="bg-gradient-to-b from-white to-gray-50 shadow-sm rounded-lg p-2">
-                <p className="">
-                  Life changing course. Everything explained clearly.
-                </p>
-              </div>
+                );
+              })}
             </div>
           </section>
         </>

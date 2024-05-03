@@ -8,7 +8,7 @@ function RattingsInput({ onChange }: Props) {
   const [confirmedTill, setConfirmedTill] = useState<number | null>(null);
 
   return (
-    <div className="w-full flex items-center gap-2 my-2">
+    <div className="flex items-center gap-2">
       {new Array(5).fill(0).map((_, index: number) => {
         return (
           <CiStar

@@ -15,7 +15,11 @@ export async function GET(
         path: "mediaId",
         populate: { path: "images videos" },
       })
-      .populate({ path: "teacherId", select: "name _id" });
+      .populate({ path: "teacherId", select: "name _id" })
+      .populate({
+        path: "reviews",
+        populate: { path: "by", select: "name createdAt" },
+      });
 
     return NextResponse.json({
       success: true,

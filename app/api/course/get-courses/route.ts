@@ -19,13 +19,15 @@ export async function GET(req: NextRequest) {
         { title: { $regex: query, $options: "i" } },
         { description: { $regex: query, $options: "i" } },
       ],
-    });
+    }).populate("reviews");
   } else {
     const teacher = await User.findOne({ email: session?.user?.email });
-    courses = await Course.find({ teacherId: teacher._id }).populate({
-      path: "mediaId",
-      populate: { path: "videos images" },
-    });
+    courses = await Course.find({ teacherId: teacher._id })
+      .populate({
+        path: "mediaId",
+        populate: { path: "videos images" },
+      })
+      .populate("reviews");
   }
 
   return NextResponse.json({
