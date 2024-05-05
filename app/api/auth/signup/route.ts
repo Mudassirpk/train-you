@@ -63,6 +63,7 @@ export async function POST(req: NextRequest) {
             message:
               "Account created successfully. Verification code has been sent to your email: " +
               response.accepted[0],
+            userId: saved_user._id,
           },
           { status: 201 }
         );

@@ -7,7 +7,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const paths_opted_out_of_main_layout = ["/login", "/dashboard"];
+export const paths_opted_out_of_main_layout = [
+  "/login",
+  "/dashboard",
+  "/education",
+  "/signup",
+  "/skills",
+];
 
 export function is_opted_path(pathname: string) {
   return paths_opted_out_of_main_layout.find((path: string) =>

@@ -8,6 +8,7 @@ import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { client } from "@/providers/queryprovider";
 import { useSearchParams } from "next/navigation";
+
 type Props = { lesson: any; index: number };
 
 function Lesson({ lesson, index }: Props) {

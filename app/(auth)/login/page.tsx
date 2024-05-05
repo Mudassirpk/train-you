@@ -20,7 +20,6 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
     const res = await signIn("credentials", { ...creds, redirect: false });
-    console.log("res: ", res);
     if (res?.status === 200) {
         setError(null);
       setIsLoading(false);

@@ -14,18 +14,6 @@ type Props = {};
 function SignUp({}: Props) {
   const [userValidationErrors, setUserValidationErrors] = useState<any>({});
   const router = useRouter();
-  const { mutate, status } = useMutation({
-    mutationFn: createUser,
-    onSuccess(data) {
-      if (data.data.success) {
-        router.push("/login");
-      } else {
-        setUserValidationErrors({
-          serverError: { message: data.data.message },
-        });
-      }
-    },
-  });
 
   const [user, setUser] = useState({
     name: "",
@@ -34,6 +22,23 @@ function SignUp({}: Props) {
     confirmPassword: "",
     role: "",
     phone: "",
+  });
+
+  const { mutate, status } = useMutation({
+    mutationFn: createUser,
+    onSuccess(data) {
+      if (data.data.success) {
+        if (user.role === "teacher") {
+          router.push(`/education?userId=${data?.data.userId}`);
+        } else {
+          router.push(`/login`);
+        }
+      } else {
+        setUserValidationErrors({
+          serverError: { message: data.data.message },
+        });
+      }
+    },
   });
 
   async function createUser() {

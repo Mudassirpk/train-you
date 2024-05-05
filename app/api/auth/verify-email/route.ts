@@ -2,23 +2,20 @@ import { User } from "@/db/models";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  console.log("verify email triggered");
   try {
     const { token, email } = await req.json();
-    console.log("token: ", token);
-    console.log("email: ", email);
     const userVerified = await User.findOne({
       email: email,
     });
-    console.log('user: ',userVerified)
+
     if (userVerified && userVerified.details.verificationCode === token) {
-      await User.findOneAndUpdate(
+      await User.updateOne(
         {
           email: userVerified.email,
         },
         {
-          details: {
-            verified: true,
+          $set: {
+            "details.verified": true,
           },
         }
       );
