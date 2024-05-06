@@ -1,12 +1,11 @@
 "use client";
 import Loading from "@/components/loading";
-import Modal from "@/components/modal";
 import EditSkills from "@/components/profile/EditSkills";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -32,12 +31,29 @@ export default function EditProfile() {
     user = data.data.user;
   }
 
+  const { status, mutate } = useMutation({
+    mutationKey: ["update-profile"],
+    mutationFn: async () =>
+      await axios.post("/api/edit-profile", {
+        personalInformation,
+        education,
+      }),
+  });
+
   useEffect(() => {
     if (user) {
       setPersonalInformation({
         name: user.name,
         phone: user.phone,
       });
+
+      if (user.details.degree) {
+        setEducation({
+          degree: user.details.degree,
+          major: user.details.major,
+          institute: user.details.institute,
+        });
+      }
     }
   }, [user]);
 
@@ -52,7 +68,12 @@ export default function EditProfile() {
           <Loading message="Fetching user information" />
         ) : (
           <div className="w-full p-4 flex-1 overflow-y-scroll">
-            <form>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                mutate();
+              }}
+            >
               <p className="text-xl font-semibold text-gray-700">
                 Personal Information
               </p>
@@ -133,8 +154,9 @@ export default function EditProfile() {
                 </Label>
               </div>
               <Button
+                disabled={status === "pending"}
                 type="submit"
-                className="my-2 w-full bg-indigo-600 hover:bg-indigo-500"
+                className="my-2 w-full disabled:bg-gray-400 disabled:text-black bg-indigo-600 hover:bg-indigo-500"
               >
                 Save Changes
               </Button>

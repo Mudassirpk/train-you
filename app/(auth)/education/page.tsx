@@ -30,7 +30,7 @@ function CompleteProfile({}: Props) {
       ),
     onSuccess(data) {
       if (data.data.success) {
-        router.push("/skills");
+        router.push(`/skills?userId=${searchParams.get("userId")}`);
       }
     },
   });
