@@ -17,7 +17,9 @@ export default function Account() {
   const { data: session, status } = useSession();
 
   return status === "loading" ? (
-    <div><Loading textColor="white" /></div>
+    <div>
+      <Loading textColor="white" />
+    </div>
   ) : status === "authenticated" ? (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -35,7 +37,7 @@ export default function Account() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem className={"cursor-pointer"}>
-            Settings
+            <Link href={"/dashboard/edit-profile"}>Settings</Link>{" "}
           </DropdownMenuItem>
           <DropdownMenuItem className={"cursor-pointer"}>
             <Link href={"/dashboard"}>Dashboard</Link>
