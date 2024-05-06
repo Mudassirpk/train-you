@@ -10,6 +10,7 @@ export async function POST(request: NextRequest) {
     const session = await getServerSession();
     const course_data = await request.json();
     const media = course_data.media;
+
     const teacher = await User.findOne({ email: session?.user?.email });
 
     const courseMedia = new Media({});
@@ -55,6 +56,12 @@ export async function POST(request: NextRequest) {
     );
 
     const courseCreated = await new_course.save();
+
+    await User.updateOne({
+      email: session?.user?.email
+    }, {
+      $push: { courses: courseCreated._id }
+    })
 
     if (courseCreated) {
       return NextResponse.json(
