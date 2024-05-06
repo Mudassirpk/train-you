@@ -17,7 +17,6 @@ export default function Profile() {
   let user;
   if (isFetched && data && data.data.success) {
     user = data.data.user;
-  
   }
 
   return (
@@ -55,39 +54,45 @@ export default function Profile() {
                 </Link>
               </div>
             </div>
-            <div className="w-full flex justify-between p-4">
-              <p className="font-semibold text-xl text-indigo-600">Skills</p>
-              <div className="flex gap-2 items-center flex-wrap">
-                {user.details.skills
-                  ? user.details.skills.map((skill: string) => {
-                      return (
-                        <p className="px-3 py-1 rounded-xl bg-indigo-100 text-indigo-900">
-                          {skill}
-                        </p>
-                      );
-                    })
-                  : null}
-              </div>
-            </div>
-            <div className="w-full p-4">
-              <p className="mb-2 text-2xl font-semibold text-indigo-600">
-                Education
-              </p>
-              <div className="w-full p-4 bg-white border border-gray-400 rounded-xl text-gray-700">
-                <div className="w-full flex justify-between items-center">
-                  <p className="text-lg font-semibold">Degree</p>
-                  <p className="text-lg">{user.details.degree}</p>
+            {user.role === "teacher" ? (
+              <>
+                <div className="w-full flex justify-between p-4">
+                  <p className="font-semibold text-xl text-indigo-600">
+                    Skills
+                  </p>
+                  <div className="flex gap-2 items-center flex-wrap">
+                    {user.details.skills
+                      ? user.details.skills.map((skill: string) => {
+                          return (
+                            <p className="px-3 py-1 rounded-xl bg-indigo-100 text-indigo-900">
+                              {skill}
+                            </p>
+                          );
+                        })
+                      : null}
+                  </div>
                 </div>
-                <div className="w-full flex justify-between items-center">
-                  <p className="text-lg font-semibold">Major</p>
-                  <p className="text-lg">{user.details.major}</p>
+                <div className="w-full p-4">
+                  <p className="mb-2 text-2xl font-semibold text-indigo-600">
+                    Education
+                  </p>
+                  <div className="w-full p-4 bg-white border border-gray-400 rounded-xl text-gray-700">
+                    <div className="w-full flex justify-between items-center">
+                      <p className="text-lg font-semibold">Degree</p>
+                      <p className="text-lg">{user.details.degree}</p>
+                    </div>
+                    <div className="w-full flex justify-between items-center">
+                      <p className="text-lg font-semibold">Major</p>
+                      <p className="text-lg">{user.details.major}</p>
+                    </div>
+                    <div className="w-full flex justify-between items-center">
+                      <p className="text-lg font-semibold">Institute</p>
+                      <p className="text-lg">{user.details.institute}</p>
+                    </div>
+                  </div>
                 </div>
-                <div className="w-full flex justify-between items-center">
-                  <p className="text-lg font-semibold">Institute</p>
-                  <p className="text-lg">{user.details.institute}</p>
-                </div>
-              </div>
-            </div>
+              </>
+            ) : null}
           </div>
         )}
       </section>
