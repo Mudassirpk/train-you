@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 export default function Hero() {
   return (
     <section
@@ -24,20 +25,22 @@ export default function Hero() {
             "flex gap-4 items-center my-4 sm-lg:w-full sm-lg:justify-center"
           }
         >
-          <Button
+          <Link
+            href={"/browse"}
             className={
-              "px-4 py-2 bg-gradient-to-r from-indigo-800 text-xl to-indigo-600 hover:from-indigo-600 hover:to-indigo-800 transition-all duration-300 text-white font-semibold"
+              "px-4 py-2 bg-gradient-to-r from-indigo-800 rounded-xl text-xl to-indigo-600 hover:from-indigo-600 hover:to-indigo-800 transition-all duration-300 text-white font-semibold"
             }
           >
             Enroll Now
-          </Button>
-          <Button
+          </Link>
+          <Link
+            href={"/about"}
             className={
               "text-indigo-600 bg-transparent hover:bg-transparent hover:text-lg text-xl underline underline-offset-8"
             }
           >
             Learn more
-          </Button>
+          </Link>
         </div>
       </div>
       <div className={"w-[50%] sm-lg:w-full h-[400px] relative"}>
