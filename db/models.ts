@@ -1,5 +1,3 @@
-import { timeStamp } from "console";
-
 const mongoose = require("mongoose");
 
 // Define the model for User
@@ -35,6 +33,19 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Earning model
+
+const EarningSchema = new mongoose.Schema(
+  {
+    course: { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
+    amount: Number,
+    student: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  },
+  {
+    timestamps: true,
+  }
+);
+
 // Define the model for Event
 const EventSchema = new mongoose.Schema(
   {
@@ -52,8 +63,8 @@ const EventSchema = new mongoose.Schema(
 const EnrollmentSchema = new mongoose.Schema(
   {
     courseId: { type: mongoose.Schema.Types.ObjectId, ref: "Course" },
-    atLesson: String,
-    status: String,
+    atLesson: { type: mongoose.Schema.Types.ObjectId, ref: "Lesson" },
+    completed: Boolean,
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
@@ -184,3 +195,5 @@ export const Coupan =
   mongoose.models.Coupan || mongoose.model("Coupan", CoupanSchema);
 export const Review =
   mongoose.models.Review || mongoose.model("Review", ReviewSchema);
+export const Earning =
+  mongoose.models.Earning || mongoose.model("Earning", EarningSchema);
