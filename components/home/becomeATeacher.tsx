@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function BecomeATeacher() {
   return (
@@ -10,17 +11,18 @@ export default function BecomeATeacher() {
         <h3 className={"text-indigo-800 font-bold md:text-center text-3xl"}>
           Become an Instructor
         </h3>
-        <p className={"text-indigo-400 md:text-center"}>
+        <p className={"text-indigo-400 md:text-center mb-4"}>
           Make use of your skills teach others on the platform. Get rewards for
           your teaching skills.
         </p>
-        <Button
+        <Link
+          href={`/signup?role=teacher`}
           className={
-            "text-white bg-gradient-to-r from-indigo-800 to-indigo-600 hover:from-indigo-600 hover:to-indigo-800 transition-all duration-300 text-lg my-4"
+            "text-white bg-gradient-to-r px-4 py-2 rounded-lg from-indigo-800 to-indigo-600 hover:from-indigo-600 hover:to-indigo-800 transition-all duration-300 text-lg my-4"
           }
         >
           Get you trainer account
-        </Button>
+        </Link>
       </div>
       <div className={"w-[50%] relative h-[400px] md:w-full"}>
         <Image
