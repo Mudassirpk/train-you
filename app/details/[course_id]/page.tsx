@@ -4,24 +4,66 @@ import AddReview from "@/components/Courses/addReview";
 import Ratting from "@/components/Courses/ratting";
 import Loading from "@/components/loading";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
+import { loadStripe } from "@stripe/stripe-js";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 export default function Details() {
+  const session = useSession();
   const { course_id } = useParams();
+  const searchParams = useSearchParams();
 
   const { data, isFetching, isFetched } = useQuery({
     queryKey: ["single-user-course"],
     queryFn: async () => await axios.get(`/api/course/${course_id}`),
   });
 
-  let course;
+  let course: any;
   if (isFetched && data?.data.success) course = data?.data.course;
+
+  const { status, mutate: createStripeCheckoutSession } = useMutation({
+    mutationKey: ["enroll-course"],
+    mutationFn: async () =>
+      await axios.post("/api/stripe/create-checkout-session", {
+        name: course.title,
+        quantity: 1,
+        price: course.price,
+        courseId: course_id,
+      }),
+    async onSuccess(data) {
+      if (data?.data.session) {
+        const stripe = await loadStripe(
+          "pk_test_51OWGV3KiYOFO2Jl8X4lhMGd4Hm7KKB5O6K7XQjN0mqYRqyAyWVtyFbve3zKZi5KaQBFyDl7SdLKMexByoEUMIv5P00CUeqbSQV"
+        );
+
+        await stripe?.redirectToCheckout({
+          sessionId: data?.data.session.id,
+        });
+      }
+    },
+  });
+
+  const { status: createEnrollmentStatus, mutate: createEnrollment } =
+    useMutation({
+      mutationKey: ["create-enrollment"],
+      mutationFn: async () =>
+        await axios.post("/api/course/create-enrollment", {
+          courseId: course_id,
+          instructorId: course.teacherId._id,
+        }),
+      onSuccess(data) {
+        if (data?.data.success) {
+          createStripeCheckoutSession();
+        }
+      },
+    });
 
   return (
     <main className="px-12 w-full mx-auto h-auto min-h-screen">
@@ -73,8 +115,21 @@ export default function Details() {
                     RS {course.price}
                   </p>
                 </div>
-                <Button className="bg-gradient-to-r px-4 py-2 rounded-lg from-indigo-800 to-indigo-600 hover:from-indigo-600 hover:to-indigo-800 text-white">
-                  Enroll Now
+                <Button
+                  disabled={
+                    status === "pending" || createEnrollmentStatus === "pending"
+                  }
+                  onClick={(e) => {
+                    createEnrollment();
+                  }}
+                  className="disabled:bg-gray-300 disabled:text-black bg-gradient-to-r px-4 py-2 rounded-lg from-indigo-800 to-indigo-600 hover:from-indigo-600 hover:to-indigo-800 text-white"
+                >
+                  {status === "pending" ||
+                  createEnrollmentStatus === "pending" ? (
+                    <Loading />
+                  ) : (
+                    " Enroll Now"
+                  )}
                 </Button>
               </div>
             </div>
