@@ -7,20 +7,21 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import React, { FormEvent, useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Props = {};
 
 function SignUp({}: Props) {
   const [userValidationErrors, setUserValidationErrors] = useState<any>({});
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [user, setUser] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
-    role: "",
+    role: searchParams.get("role") ? searchParams.get("role") : "",
     phone: "",
   });
 
@@ -53,7 +54,7 @@ function SignUp({}: Props) {
       userValidationErrors.confirmPassword = null;
     }
 
-    if (user.role.trim().length === 0) {
+    if (user.role?.trim().length === 0) {
       setUserValidationErrors({
         ...userValidationErrors,
         role: {
@@ -205,6 +206,12 @@ function SignUp({}: Props) {
                             ...user,
                             role: e.target.checked ? e.target.value : "",
                           })
+                        }
+                        checked={
+                          searchParams.get("role") &&
+                          searchParams.get("role") === "teacher"
+                            ? true
+                            : undefined
                         }
                         type="radio"
                         name="role"
