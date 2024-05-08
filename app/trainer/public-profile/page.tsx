@@ -63,6 +63,8 @@ export default function PubliProfile() {
                 user.courses.map((course: any) => {
                   return (
                     <Course
+                      key={course._id}
+                      id={course._id}
                       title={course.title}
                       description={course.description}
                       thumbnail={course.thumbnail}
