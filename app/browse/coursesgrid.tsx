@@ -7,16 +7,20 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 
 export default function CoursesGrid() {
+
   const searchParams = useSearchParams();
+  const query = searchParams.get("query");
+
   const { data, isFetching } = useQuery({
     queryKey: ["get-public-courses"],
     queryFn: async () =>
       await axios.get(
-        `/api/course/get-courses?is_public=true&query=${searchParams.get(
-          "query"
-        )}`
+        `/api/course/get-courses?is_public=true${
+          query ? "&query=" + query : ""
+        }`
       ),
   });
+
   return isFetching ? (
     <div className="w-full text-center mb-4">
       <Loading message="Fetching courses" />
