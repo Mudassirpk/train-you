@@ -16,10 +16,11 @@ export async function GET(req: NextRequest) {
   if (is_public) {
     courses = await Course.find({
       $or: [
-        { title: { $regex: query, $options: "i" } },
-        { description: { $regex: query, $options: "i" } },
+        { title: { $regex: query ? query : "", $options: "i" } },
+        { description: { $regex: query ? query : "", $options: "i" } },
       ],
     }).populate("reviews");
+
   } else {
     const teacher = await User.findOne({ email: session?.user?.email });
     courses = await Course.find({ teacherId: teacher._id })
