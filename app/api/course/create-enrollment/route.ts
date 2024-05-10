@@ -30,9 +30,11 @@ export async function POST(req: NextRequest) {
       userId: student._id,
     });
 
+    await newEnrollment.save()
+
     await User.updateOne(
       {
-        _id: data.studentId,
+        _id: student._id,
       },
       {
         $push: {
