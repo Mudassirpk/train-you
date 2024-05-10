@@ -13,6 +13,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 import { loadStripe } from "@stripe/stripe-js";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 export default function Details() {
   const session = useSession();
@@ -106,17 +107,21 @@ export default function Details() {
                     <p className="font-semibold mb-2 text-gray-800 text-lg">
                       Instructor
                     </p>
-                    <div className="flex gap-2 items-center">
-                      <div className="w-11 h-10 relative overflow-hidden rounded-lg">
-                        <Image
-                          alt="trainer"
-                          style={{ objectFit: "cover" }}
-                          src={"/person.jpg"}
-                          fill={true}
-                        />
+                    <Link
+                      href={`/trainer/public-profile?userId=${course.teacherId._id}`}
+                    >
+                      <div className="flex gap-2 items-center">
+                        <div className="w-11 h-10 relative overflow-hidden rounded-lg">
+                          <Image
+                            alt="trainer"
+                            style={{ objectFit: "cover" }}
+                            src={"/person.jpg"}
+                            fill={true}
+                          />
+                        </div>
+                        <p className="font-semibold hover:underline">{course.teacherId.name}</p>
                       </div>
-                      <p className="font-semibold">{course.teacherId.name}</p>
-                    </div>
+                    </Link>
                   </div>
 
                   <p className="text-4xl font-semibold text-indigo-400 underline underline-offset-8 mt-4">
