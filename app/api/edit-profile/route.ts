@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
         },
         {
           ...data.personalInformation,
-        }
+        },
       );
     }
 
@@ -32,7 +32,6 @@ export async function POST(req: NextRequest) {
         }
         educationDetails[`details.${key}`] = data.education[key];
       }
-      console.log(educationUpdateRequired);
       if (educationUpdateRequired) {
         await User.updateOne(
           {
@@ -42,7 +41,7 @@ export async function POST(req: NextRequest) {
             $set: {
               ...educationDetails,
             },
-          }
+          },
         );
       }
     }

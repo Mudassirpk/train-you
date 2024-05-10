@@ -30,8 +30,8 @@ export async function POST(req: NextRequest) {
       success_url: `http://localhost:3000/details/${data.courseId}?success=true`,
       cancel_url: `http://localhost:3000/details/${data.courseId}?success=false`,
       metadata: {
-        courseId: data.courseId,
-        userId: user_session.user.email,
+        course_id: data.courseId,
+        user_email: user_session.user.email,
       },
     });
     return NextResponse.json({ session });

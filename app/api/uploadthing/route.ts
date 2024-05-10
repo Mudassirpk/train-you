@@ -11,7 +11,7 @@ export const { GET, POST } = createNextRouteHandler({
 export async function DELETE(request: NextRequest) {
   const urls: string[] = (await request.json()).urls;
   const files = urls.map((url: string) =>
-    url.substring(url.lastIndexOf("/") + 1)
+    url.substring(url.lastIndexOf("/") + 1),
   );
 
   const utapi = new UTApi();
