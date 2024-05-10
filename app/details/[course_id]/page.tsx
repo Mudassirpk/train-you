@@ -12,13 +12,21 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 import { loadStripe } from "@stripe/stripe-js";
-import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 
 export default function Details() {
   const session = useSession();
   const { course_id } = useParams();
   const searchParams = useSearchParams();
+
+  const {
+    data: enrollmentStatusData,
+    isFetching: fetchingEnrollmentStatusData,
+  } = useQuery({
+    queryKey: ["enrollment-status"],
+    queryFn: async () =>
+      axios.get(`/api/course/is-enrolled?courseId=${course_id}`),
+  });
 
   const { data, isFetching, isFetched } = useQuery({
     queryKey: ["single-user-course"],
@@ -115,22 +123,31 @@ export default function Details() {
                     RS {course.price}
                   </p>
                 </div>
-                <Button
-                  disabled={
-                    status === "pending" || createEnrollmentStatus === "pending"
-                  }
-                  onClick={(e) => {
-                    createEnrollment();
-                  }}
-                  className="disabled:bg-gray-300 disabled:text-black bg-gradient-to-r px-4 py-2 rounded-lg from-indigo-800 to-indigo-600 hover:from-indigo-600 hover:to-indigo-800 text-white"
-                >
-                  {status === "pending" ||
-                  createEnrollmentStatus === "pending" ? (
-                    <Loading />
-                  ) : (
-                    " Enroll Now"
-                  )}
-                </Button>
+                {fetchingEnrollmentStatusData ? (
+                  <Loading />
+                ) : enrollmentStatusData?.data.enrolled ? (
+                  <p className="px-2 text-center font-semibold py-2 bg-indigo-100 rounded-xl text-indigo-900">
+                    Already enrolled
+                  </p>
+                ) : (
+                  <Button
+                    disabled={
+                      status === "pending" ||
+                      createEnrollmentStatus === "pending"
+                    }
+                    onClick={(e) => {
+                      createEnrollment();
+                    }}
+                    className="disabled:bg-gray-300 disabled:text-black bg-gradient-to-r px-4 py-2 rounded-lg from-indigo-800 to-indigo-600 hover:from-indigo-600 hover:to-indigo-800 text-white"
+                  >
+                    {status === "pending" ||
+                    createEnrollmentStatus === "pending" ? (
+                      <Loading />
+                    ) : (
+                      " Enroll Now"
+                    )}
+                  </Button>
+                )}
               </div>
             </div>
           </section>
