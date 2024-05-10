@@ -27,8 +27,8 @@ export async function POST(req: NextRequest) {
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
-      success_url: `http://localhost:3000/details/${data.courseId}?success=true`,
-      cancel_url: `http://localhost:3000/details/${data.courseId}?success=false`,
+      success_url: `http://localhost:3000/stripe-success?courseId=${data.courseId}`,
+      cancel_url: `http://localhost:3000/${data.courseId}`,
       metadata: {
         course_id: data.courseId,
         user_email: user_session.user.email,
