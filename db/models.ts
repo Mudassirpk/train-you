@@ -29,6 +29,7 @@ const UserSchema = new mongoose.Schema(
     teacherId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     admin: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     teacher: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    earnings: [{ type: mongoose.Schema.Types.ObjectId, ref: "Earning" }],
   },
   { timestamps: true }
 );
