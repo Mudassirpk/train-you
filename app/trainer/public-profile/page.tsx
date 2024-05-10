@@ -1,5 +1,6 @@
 "use client";
 
+import Ratting from "@/components/Courses/ratting";
 import Loading from "@/components/loading";
 import Message from "@/components/message";
 import Course from "@/components/public/Course";
@@ -48,6 +49,12 @@ export default function PubliProfile() {
                     {skill}
                   </p>
                 ))}
+              </div>
+              <div className="flex gap-4 items-center">
+                Rattings{" "}
+                <span>
+                  <Ratting rattings={parseInt(user.details.averageRattings)} />
+                </span>
               </div>
             </div>
           </div>
