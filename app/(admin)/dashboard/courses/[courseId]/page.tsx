@@ -12,6 +12,7 @@ import AddLesson from "@/components/Courses/addLesson";
 import Link from "next/link";
 import { useToast } from "@/components/ui/use-toast";
 import ConfirmDelete from "@/components/confirmDelete";
+import { useSession } from "next-auth/react";
 
 type Props = {};
 
@@ -19,6 +20,8 @@ function page({}: Props) {
   const router = useRouter();
   const { toast } = useToast();
   const { courseId } = useParams();
+  const session = useSession();
+
   const { data, isFetching } = useQuery({
     queryKey: ["single-user-course"],
     queryFn: async () => await axios.get(`/api/course/${courseId}`),
@@ -89,16 +92,20 @@ function page({}: Props) {
               </p>
               <p>{data?.data.course.description}</p>
             </div>
-            <div className="flex flex-col gap-2 items-center">
-              <Button className="bg-indigo-800 hover:bg-indigo-600">
-                Edit
-              </Button>
-              <ConfirmDelete
-                item={data?.data.course.title}
-                status={status === "pending" ? status : deleteCourseMediaStatus}
-                onConfirm={mutate}
-              />
-            </div>
+            {session.data?.user.role === "teacher" ? (
+              <div className="flex flex-col gap-2 items-center">
+                <Button className="bg-indigo-800 hover:bg-indigo-600">
+                  Edit
+                </Button>
+                <ConfirmDelete
+                  item={data?.data.course.title}
+                  status={
+                    status === "pending" ? status : deleteCourseMediaStatus
+                  }
+                  onConfirm={mutate}
+                />
+              </div>
+            ) : null}
           </div>
           <div className="w-full flex justify-between items-center px-2">
             <div className="w-1/2 my-4 space-y-2">
@@ -134,7 +141,7 @@ function page({}: Props) {
               >
                 Lessons
               </Link>
-              <AddLesson />
+              {session.data?.user.role === "teacher" ? <AddLesson /> : null}
             </div>
           </div>
           <div className="full">

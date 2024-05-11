@@ -8,11 +8,13 @@ import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { client } from "@/providers/queryprovider";
 import { useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 type Props = { lesson: any; index: number };
 
 function Lesson({ lesson, index }: Props) {
   const searchParams = useSearchParams();
+  const session = useSession();
 
   const [detailsOpened, setDetailsOpened] = useState(false);
   const { toast } = useToast();
@@ -80,11 +82,13 @@ function Lesson({ lesson, index }: Props) {
             {index + 1}. {lesson.title}
           </p>
           <div className="flex-1 flex justify-end items-center gap-2">
-            <ConfirmDelete
-              onConfirm={deleteLesson}
-              status={status === "idle" ? deleteMediaStatus : status}
-              item={lesson.title}
-            />
+            {session.data?.user.role === "teacher" ? (
+              <ConfirmDelete
+                onConfirm={deleteLesson}
+                status={status === "idle" ? deleteMediaStatus : status}
+                item={lesson.title}
+              />
+            ) : null}
             <button
               onClick={() => setDetailsOpened(!detailsOpened)}
               className="p-2 rounded-xl text-white bg-indigo-600 hover:bg-indigo-500"
@@ -105,17 +109,13 @@ function Lesson({ lesson, index }: Props) {
             <h3 className="my-2 font-semibold text-indigo-600">
               Course content
             </h3>
-            <MediaGrid
-              media={[].concat(
-                lesson.mediaId.videos.map((video: any) => {
-                  return { ...video, type: "video" };
-                }),
-                lesson.mediaId.images.map((image: any) => {
-                  return { ...image, type: "image" };
-                })
-              )}
-              sourceAsUrl={true}
-            />
+            {lesson.mediaId.videos.map((video: { url: string }) => {
+              return (
+                <video controls={true} className="h-full w-full">
+                  <source src={video.url} />
+                </video>
+              );
+            })}
           </div>
         </div>
       ) : null}

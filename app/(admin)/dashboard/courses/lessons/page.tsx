@@ -6,9 +6,13 @@ import { useSearchParams } from "next/navigation";
 import Lesson from "./lesson";
 import AddLesson from "@/components/Courses/addLesson";
 import { CTC } from "@/lib/utils";
+import { useSession } from "next-auth/react";
 
 export default function Lessions() {
   const searchParams = useSearchParams();
+  const session = useSession();
+
+  console.log(session)
 
   const { data, isFetching } = useQuery({
     queryKey: ["get-lessons"],
@@ -24,7 +28,7 @@ export default function Lessions() {
         <h2 className="w-full text-2xl text-indigo-600 font-semibold">
           Lessons
         </h2>
-        <AddLesson />
+        {session.data?.user.role === "teacher" ? <AddLesson /> : null}
       </div>
       <div
         className={`w-full flex flex-col gap-2 flex-1 overflow-y-scroll ${CTC["scroll-bar"]}`}
