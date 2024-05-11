@@ -1,10 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 
 type Props = {
   title: string;
