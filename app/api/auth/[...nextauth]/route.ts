@@ -47,15 +47,22 @@ const options: NextAuthOptions = {
     },
     async jwt({ token, user, session }) {
       if (user) {
-        token.role = (user as any).role;
+        console.log("user: ", user);
+        token.email = user.email;
+        token.name = user.name;
+        token.role = user.role;
+        token._id = user._id;
       }
       return token;
     },
-    async session({ session, token, user }) {
+    async session({ session, token }) {
       if (session.user && token) {
-        (session.user as any).email = token.email;
-        (session.user as any).name = token.name;
-        (session.user as any).role = token.role;
+        if (token.email && token.name && token.role && token._id) {
+          session.user.email = token.email;
+          session.user.name = token.name;
+          session.user.role = token.role as "teacher" | "student";
+          session.user._id = token._id as string;
+        }
       }
       return session;
     },
