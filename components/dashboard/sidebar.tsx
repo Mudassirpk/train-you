@@ -72,13 +72,13 @@ export default function SideBar() {
             collapsed={collapsed}
           />
           <SidebarItem
-            to="/events"
+            to="/dashboard/events"
             icon={<MdEvent className="text-2xl" />}
             itemName="Events"
             collapsed={collapsed}
           />
           <SidebarItem
-            to="venues"
+            to="/dashboard/venues"
             icon={<LuLandmark className="text-2xl" />}
             itemName="Venues"
             collapsed={collapsed}

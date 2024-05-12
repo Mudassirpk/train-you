@@ -25,7 +25,12 @@ function Course({ id, title, thumbnail, description }: Props) {
           <p className="font-semibold capitalize">{title}</p>
           <p>{description}</p>
         </div>
-        <Link href={`/details/${id}`} className="px-2 py-1 rounded-xl hover:bg-indigo-500 bg-indigo-600 text-white">Enroll</Link>
+        <Link
+          href={`/details/${id}`}
+          className="px-2 py-1 rounded-xl hover:bg-indigo-500 bg-indigo-600 text-white"
+        >
+          Enroll
+        </Link>
       </div>
     </div>
   );

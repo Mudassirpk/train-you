@@ -47,7 +47,6 @@ const options: NextAuthOptions = {
     },
     async jwt({ token, user, session }) {
       if (user) {
-        console.log("user: ", user);
         token.email = user.email;
         token.name = user.name;
         token.role = user.role;

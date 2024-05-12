@@ -7,7 +7,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 
 type Props = {
@@ -17,6 +17,7 @@ type Props = {
   children: React.ReactNode;
   triggerStyles?: string;
   no_scroll?: boolean;
+  close?: boolean;
 };
 
 function Modal({
@@ -25,12 +26,24 @@ function Modal({
   description,
   triggerStyles,
   no_scroll,
+  close,
   children,
 }: Props) {
+  const [isOpen, setIsOpen] = useState<undefined | boolean>();
+
+  useEffect(() => {
+    if (close) {
+      setIsOpen(false);
+    }
+  }, [close]);
+
   return (
-    <Dialog>
+    <Dialog open={isOpen}>
       <DialogTrigger>
         <Button
+          onClick={() => {
+            setIsOpen(undefined);
+          }}
           className={
             triggerStyles
               ? triggerStyles
