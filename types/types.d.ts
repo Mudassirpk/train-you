@@ -12,9 +12,10 @@ type TVenue = {
 };
 
 type TUser = {
+  _id:string,
   name: string;
   email: string;
-  password: string;
+  password: string|null;
   phone: string;
   role: string;
   details: Record<string, any>;

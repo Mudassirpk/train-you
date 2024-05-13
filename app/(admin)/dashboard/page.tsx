@@ -49,7 +49,7 @@ export default function Dashboard() {
           <div className="flex items-center gap-2 font-semibold">
             <p className="text-indigo-900">Signed In as</p>{" "}
             <p className="px-2 capitalize py-1 bg-indigo-100 text-indigo-900 rounded-lg">
-              {(data?.user as any).role}
+              {data?.user.role}
             </p>
           </div>
         </div>
@@ -84,15 +84,21 @@ export default function Dashboard() {
                   date={`For month of ${teacherStates?.data.states.earnings.month}`}
                   unit={{ title: "RS ", position: "left" }}
                 />
-                <BestSelling course={teacherStates?.data.states.bestSelling} />
+                {teacherStates?.data.states.bestSelling ? (
+                  <BestSelling
+                    course={teacherStates?.data.states.bestSelling}
+                  />
+                ) : null}
               </>
             ) : null}
-            <LatestEvent
-              event={
-                studentStates?.data.states.latestEvent ||
-                teacherStates?.data.states.latestEvent
-              }
-            />
+            {teacherStates?.data.states.latestEvent ? (
+              <LatestEvent
+                event={
+                  studentStates?.data.states.latestEvent ||
+                  teacherStates?.data.states.latestEvent
+                }
+              />
+            ) : null}
           </div>
         )}
       </section>

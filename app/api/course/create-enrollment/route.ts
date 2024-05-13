@@ -58,6 +58,9 @@ export async function POST(req: NextRequest) {
       _id: data.instructorId,
       students: student._id,
     });
+
+    
+
     if (!studentPresentForTeacher) {
       await User.updateOne(
         {
@@ -75,6 +78,7 @@ export async function POST(req: NextRequest) {
       success: true,
       enrollment: newEnrollment,
     });
+
   } catch (error) {
     console.log(error);
   }

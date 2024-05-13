@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   const data = await req.json();
 
   const stripeIns = new Stripe(process.env.STRIPE_SECRET_KEY!);
-
+  console.log(data);
   const lineItems = [
     {
       price_data: {
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
         product_data: {
           name: data.name,
         },
-        unit_amount: data.price,
+        unit_amount: data.price * 100,
       },
       quantity: data.quantity,
     },
