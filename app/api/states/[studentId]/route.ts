@@ -28,7 +28,5 @@ export async function GET(
       select: "name email",
     });
 
-  console.log(coursesEnrolled);
-
   return NextResponse.json({ states: { coursesEnrolled, latestEvent } });
 }
