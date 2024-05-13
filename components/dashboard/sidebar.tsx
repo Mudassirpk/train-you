@@ -77,12 +77,14 @@ export default function SideBar() {
             itemName="Events"
             collapsed={collapsed}
           />
-          <SidebarItem
-            to="/dashboard/venues"
-            icon={<LuLandmark className="text-2xl" />}
-            itemName="Venues"
-            collapsed={collapsed}
-          />
+          {data?.user.role === "teacher" ? (
+            <SidebarItem
+              to="/dashboard/venues"
+              icon={<LuLandmark className="text-2xl" />}
+              itemName="Venues"
+              collapsed={collapsed}
+            />
+          ) : null}
         </div>{" "}
         <Button
           onClick={() => {

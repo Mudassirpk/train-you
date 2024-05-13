@@ -38,3 +38,35 @@ export const CTC = {
   "scroll-bar":
     "scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-slate-700 scrollbar-track-slate-300",
 };
+
+export function formatDate(dateString: string) {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const date = new Date(dateString);
+  const day = date.getDate();
+  const monthName = months[date.getMonth()];
+  const year = date.getFullYear();
+  const dayOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ][date.getDay()];
+
+  return `${dayOfWeek}, ${day} ${monthName} ${year}`;
+}
