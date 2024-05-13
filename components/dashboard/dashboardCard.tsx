@@ -5,6 +5,7 @@ export default function DashboardCard({
   stats,
   unit,
   date,
+  stateSize,
 }: {
   title: string;
   stats: number;
@@ -13,6 +14,7 @@ export default function DashboardCard({
     position: "right" | "left";
   };
   date?: string;
+  stateSize?: string;
 }) {
   return (
     <div className="p-4 border-2 border-indigo-600 rounded-lg">
@@ -20,7 +22,11 @@ export default function DashboardCard({
         <p className="text-sm font-semibold text-indigo-600">{title}</p>
         <SiCoursera className="text-4xl text-indigo-300" />
       </div>
-      <p className="w-full text-6xl font-bold text-indigo-800">
+      <p
+        className={`w-full text-${
+          stateSize ? stateSize : "6xl"
+        } font-bold text-indigo-800`}
+      >
         {" "}
         {unit?.position === "left" ? unit?.title : null}
         {stats} {unit?.position === "right" ? unit?.title : null}
