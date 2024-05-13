@@ -24,6 +24,15 @@ export default function Dashboard() {
 
   if (status === "loading") return <Loading />;
 
+  // query for teacher states
+  const { data: teacherStates, isFetching: fetchingTeacherStates } = useQuery({
+    queryKey: ["get-states-student"],
+    queryFn: async () =>
+      await axios.get(`/api/states/teacher/${data?.user._id}`),
+    enabled: data?.user.role === "teacher",
+  });
+
+  // query for student states
   const { data: studentStates, isFetching: fetchingStudentStates } = useQuery({
     queryKey: ["get-states-student"],
     queryFn: async () => await axios.get(`/api/states/${data?.user._id}`),
@@ -77,7 +86,7 @@ export default function Dashboard() {
                 <BestSelling />
               </>
             ) : null}
-            <LatestEvent event={studentStates?.data.states.latestEvent} />
+            {/* <LatestEvent event={studentStates?.data.states.latestEvent} /> */}
           </div>
         )}
       </section>
