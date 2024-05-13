@@ -8,8 +8,6 @@ export async function GET(
 ) {
   const studentId = params.studentId;
 
-  console.log("si: ", studentId);
-
   await connect_db();
   const events = await Session.find({
     members: {
