@@ -55,7 +55,7 @@ export default function Dashboard() {
         </div>
         <Separator className="my-2" />
 
-        {fetchingStudentStates ? (
+        {fetchingStudentStates || fetchingTeacherStates ? (
           <Loading message="Fetching courses" />
         ) : (
           <div className="w-full grid gap-2 grid-cols-3 lg:grid-cols-2 md:grid-cols-1">
@@ -66,7 +66,7 @@ export default function Dashboard() {
               stats={
                 data?.user.role === "student"
                   ? studentStates?.data?.states.coursesEnrolled
-                  : 0
+                  : teacherStates?.data.states.coursesCreated
               }
               date={"till " + formatDate(dayjs().toString())}
             />{" "}
@@ -75,18 +75,24 @@ export default function Dashboard() {
                 <DashboardCard
                   title="Enrollments"
                   date="For month of July"
-                  stats={55}
+                  stats={teacherStates?.data.states.enrollments}
                 />
                 <DashboardCard
+                  stateSize="2xl"
                   title="Earnings"
-                  stats={55}
-                  date="For month of July "
-                  unit={{ title: "RS", position: "left" }}
+                  stats={teacherStates?.data.states.earnings.amount}
+                  date={`For month of ${teacherStates?.data.states.earnings.month}`}
+                  unit={{ title: "RS ", position: "left" }}
                 />
-                <BestSelling />
+                <BestSelling course={teacherStates?.data.states.bestSelling} />
               </>
             ) : null}
-            {/* <LatestEvent event={studentStates?.data.states.latestEvent} /> */}
+            <LatestEvent
+              event={
+                studentStates?.data.states.latestEvent ||
+                teacherStates?.data.states.latestEvent
+              }
+            />
           </div>
         )}
       </section>
