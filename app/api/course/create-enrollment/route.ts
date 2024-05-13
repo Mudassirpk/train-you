@@ -1,27 +1,27 @@
 import connect_db from "@/db/connection";
-import { Enrollment, Lesson, User } from "@/db/models";
+import { Course, Enrollment, Lesson, User } from "@/db/models";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession();
-    const student = await User.findOne({
-      email: session?.user?.email,
-    });
 
     const data = await req.json();
 
     await connect_db();
+
+    const student = await User.findOne({
+      email: session?.user?.email,
+    });
 
     const atLesson = await Lesson.findOne(
       {
         courseId: data.courseId,
       },
       {},
-      { sort: { _id: 1 } }
+      { sort: { _id: 1 } },
     );
-
 
     const newEnrollment = new Enrollment({
       courseId: data.courseId,
@@ -30,7 +30,18 @@ export async function POST(req: NextRequest) {
       userId: student._id,
     });
 
-    await newEnrollment.save()
+    await newEnrollment.save();
+
+    await Course.updateOne(
+      {
+        _id: data.courseId,
+      },
+      {
+        $push: {
+          enrollments: newEnrollment._id,
+        },
+      },
+    );
 
     await User.updateOne(
       {
@@ -39,9 +50,8 @@ export async function POST(req: NextRequest) {
       {
         $push: {
           enrollments: newEnrollment._id,
-        
         },
-      }
+      },
     );
 
     const studentPresentForTeacher = await User.findOne({
@@ -57,7 +67,7 @@ export async function POST(req: NextRequest) {
           $push: {
             students: student._id,
           },
-        }
+        },
       );
     }
 
