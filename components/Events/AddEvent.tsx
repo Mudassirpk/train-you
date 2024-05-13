@@ -13,11 +13,14 @@ import { TVenue } from "@/types/types";
 import Loading from "../loading";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
+import { useToast } from "../ui/use-toast";
 
 type Props = {};
 
 function AddEvent({}: Props) {
   const session = useSession();
+  const { toast } = useToast();
+
   const [eventData, setEventData] = useState<{
     title: string;
     description: string;
@@ -42,12 +45,7 @@ function AddEvent({}: Props) {
     members: [],
   });
 
-  const {
-    data,
-    isFetching,
-    refetch: getVenues,
-    isFetched,
-  } = useQuery({
+  const { data, isFetching, isFetched } = useQuery({
     queryKey: ["get-user-venues"],
     queryFn: async () =>
       await axios.get(`/api/venue?userId=${session.data?.user._id}`),
@@ -59,13 +57,45 @@ function AddEvent({}: Props) {
 
   if (isFetched && data) venues = data.data.venues;
 
-  const { mutate, status } = useMutation({
+  const {
+    mutate,
+    status,
+    data: mutationData,
+  } = useMutation({
     mutationKey: ["add-mutation"],
-    mutationFn: async () => await axios.post("/api/event/add", eventData),
+    mutationFn: async () =>
+      await axios.post(
+        `/api/event/add?userId=${session.data?.user._id}`,
+        eventData
+      ),
+    onSuccess(data) {
+      if (data?.data.success) {
+        setEventData({
+          title: "",
+          description: "",
+          type: "online",
+          timestamps: {
+            from: "",
+            to: "",
+          },
+          links: [],
+          venue: "",
+          members: [],
+        });
+        toast({
+          title: "Add Event",
+          description: "Event added successfully",
+        });
+      }
+    },
   });
 
   return (
-    <Modal title="Add Event" triggerTitle="Add Event">
+    <Modal
+      title="Add Event"
+      triggerTitle="Add Event"
+      close={mutationData?.data.success}
+    >
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -82,7 +112,7 @@ function AddEvent({}: Props) {
             onChange={(e) => {
               setEventData({ ...eventData, title: e.target.value });
             }}
-            placeholder="e.g. John"
+            placeholder="e.g. Welcome event"
           />
         </Label>
         <Label className="flex flex-col gap-2">
@@ -93,7 +123,7 @@ function AddEvent({}: Props) {
             onChange={(e) => {
               setEventData({ ...eventData, description: e.target.value });
             }}
-            placeholder="e.g. John"
+            placeholder="e.g. Event's description"
           />
         </Label>
         <Label className="flex flex-col gap-2">
@@ -122,7 +152,6 @@ function AddEvent({}: Props) {
           <Label className="flex flex-col gap-2">
             <span>Meeting Links (add multiple links separated by space)</span>
             <Input
-              pattern="((https?|ftp):\/\/[^\s/$.?#].[^\s]*)+(\s+((https?|ftp):\/\/[^\s/$.?#].[^\s]*))*"
               onChange={(e) => {
                 const links = e.target.value.split(" ");
                 setEventData({ ...eventData, links });
@@ -141,7 +170,7 @@ function AddEvent({}: Props) {
             <Dropdown
               onSelect={(option: string) => {
                 const venueId = venues.find(
-                  (venue) => venue.name === option,
+                  (venue) => venue.name === option
                 )?._id;
                 if (venueId) {
                   setEventData({ ...eventData, venue: venueId });
@@ -172,6 +201,7 @@ function AddEvent({}: Props) {
           <Label className="flex w-[50%] flex-col gap-2">
             <span>To</span>
             <Input
+              min={eventData.timestamps.from}
               value={eventData.timestamps.to}
               onChange={(e) => {
                 setEventData({

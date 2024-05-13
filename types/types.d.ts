@@ -128,11 +128,15 @@ type TVenue = {
 };
 
 type TSession = {
+  _id: string;
+  title: string;
+  description: string;
+  author: string;
   type: string;
-  members: Types.ObjectId[];
+  members: { _id: string; name: string; email: string }[];
   timestamp: { from: string; to: string };
-  links: { url: string; name: string }[];
-  venue: Types.ObjectId;
+  links: string[];
+  venue: { _id: string; name: string };
   createdAt: string;
 };
 
